@@ -8,8 +8,31 @@
       "Bash(cat *)",
       "Bash(mkdir -p *)",
       "Bash(cp *)",
-      "Bash(chmod *)"
+      "Bash(chmod *)",
+      "Bash(python *)",
+      "Bash(pip *)"
     ],
-    "deny": []
+    "deny": [
+      "Bash(git push --force*)",
+      "Bash(git push -f *)",
+      "Bash(git reset --hard*)",
+      "Bash(rm -rf /*)",
+      "Bash(curl * | bash)",
+      "Bash(wget * | bash)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      { "command": ".claude/hooks/session-start.sh" }
+    ],
+    "PreToolUse": [
+      { "matcher": "Bash", "command": ".claude/hooks/pre-tool-use-safety.sh" }
+    ],
+    "PostToolUse": [
+      { "matcher": "Edit|Write|Create", "command": ".claude/hooks/post-edit-format.sh" }
+    ],
+    "Stop": [
+      { "command": ".claude/hooks/stop-hook-git-check.sh" }
+    ]
   }
 }

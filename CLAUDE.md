@@ -1,6 +1,6 @@
 # Claude Code Harness Engineering — Research & Reference Repository
 
-## What This Repo Is
+## Project
 
 This repository is a structured research project documenting **how to configure Claude Code effectively for any software project**. It captures patterns, templates, and concrete examples for what we call "harness engineering" — the discipline of setting up Claude Code so that AI-assisted sessions are productive, consistent, safe, and low-friction.
 
@@ -38,6 +38,67 @@ The word "harness" is deliberate: just as a test harness wraps a system under te
 2. **Document** every configurable surface in Claude Code: CLAUDE.md conventions, settings.json schema, hook lifecycle, MCP integration.
 3. **Produce** reusable templates that a developer can fill out in under 15 minutes for a new project.
 4. **Capture anti-patterns** — what makes Claude sessions frustrating or unsafe — so they can be avoided by default.
+
+## Stack
+
+- Python 3.11+, pip
+- `anthropic` SDK ≥ 0.52 — LLM calls in the research agent
+- `rich` ≥ 13.7 — terminal UI
+- No Node, no Docker required.
+
+## Commands
+
+```bash
+pip install -r requirements-agent.txt   # one-time setup
+export ANTHROPIC_API_KEY=sk-ant-...     # required for agent/
+python agent/main.py                    # interactive stretch-loop REPL
+python agent/parallel.py                # 5-topic parallel literature review
+python agent/audit.py /path/to/proj     # score a project's harness (0–25)
+python agent/audit.py . --save          # audit this repo, save to research/notes/
+```
+
+## Architecture
+
+```
+agent/
+  main.py      ← REPL entry point; parallel: command; save suffix
+  core.py      ← ResearchAgent: two-pass stretch loop (EXPLORE → STRETCH)
+  parallel.py  ← AsyncAnthropic + asyncio.gather concurrent runner
+  audit.py     ← five-layer harness scorer; point at any project dir
+  prompts.py   ← SYSTEM_PROMPT, STRETCH_PROMPT, LITERATURE_PROMPT, DEFAULT_TOPICS
+  tools.py     ← read_file, list_directory, search_repo, save_note + JSON schemas
+research/      ← seven numbered guides (00-overview … 06-codebase-analysis)
+  notes/       ← auto-saved research outputs (generated; prune freely)
+templates/     ← fill-in-the-blank CLAUDE.md, settings.json, four hook scripts
+examples/      ← web-app, api-service, data-pipeline, karpathy-minimal CLAUDE.md
+.claude/
+  commands/    ← project slash commands: /ultraplan /goal /agents /ultrareview
+  hooks/       ← SessionStart, PreToolUse, PostToolUse, Stop scripts
+```
+
+## Conventions
+
+- **Think Before Coding**: state assumptions explicitly; ask when uncertain; never silently guess
+- **Simplicity First**: minimum code that solves the stated problem; no speculative abstractions
+- **Surgical Changes**: touch only what the task requires; don't improve adjacent code
+- **Goal-Driven Execution**: convert vague requests into verifiable success criteria before acting
+- All research notes save to `research/notes/` via `agent.tools.save_note()`
+- Never edit files under `examples/karpathy-minimal/` by hand — it is a reference copy
+
+## Environment
+
+`ANTHROPIC_API_KEY` — required to run `agent/`. Get from console.anthropic.com.
+No other env vars are required for local use.
+Copy `.env.example` to `.env` if you prefer not to `export` in the shell.
+
+## Gotchas
+
+- **No API key = silent error at first request**: `ANTHROPIC_API_KEY` unset raises `AuthenticationError` on the first call, not at import. Set it before running `agent/main.py`.
+- **`research/notes/` grows fast**: `parallel.py` saves a dated `.md` per run. These are generated outputs — git-ignore or prune periodically.
+- **`audit.py` on a research repo**: the scorer expects a software project. This repo will never hit 5/5 on Environment (no production `.env`) — that is expected.
+- **Karpathy rules are a baseline, not a ceiling**: merge `examples/karpathy-minimal/CLAUDE.md` into any target project's CLAUDE.md, then add project-specific gotchas on top.
+- **`search_repo` uses basic grep regex**: escape dots and special chars. For literal strings, pass `case_sensitive=True` with the exact pattern.
+- **`parallel.py` fires all topics simultaneously**: with 10+ topics you may hit rate limits. Stay at ≤ 7 topics per run.
 
 ## How to Use This Repo
 
