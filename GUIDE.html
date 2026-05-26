@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Harness Engineering for Claude Code</title>
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+@page {
+    size: A4;
+    margin: 2.2cm 2.5cm 2.2cm 2.5cm;
+    @bottom-right {
+        content: counter(page) " / " counter(pages);
+        font-family: Inter, sans-serif;
+        font-size: 9pt;
+        color: #94a3b8;
+    }
+    @top-right {
+        content: "Harness Engineering for Claude Code";
+        font-family: Inter, sans-serif;
+        font-size: 9pt;
+        color: #94a3b8;
+    }
+}
+
+* { box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.65;
+    color: #1e293b;
+    background: #ffffff;
+}
+
+h1 {
+    font-size: 26pt;
+    font-weight: 700;
+    color: #0f172a;
+    border-bottom: 3px solid #6366f1;
+    padding-bottom: 10px;
+    margin-top: 0;
+    margin-bottom: 6px;
+    page-break-after: avoid;
+}
+
+h2 {
+    font-size: 15pt;
+    font-weight: 700;
+    color: #1e293b;
+    border-bottom: 1.5px solid #e2e8f0;
+    padding-bottom: 5px;
+    margin-top: 28px;
+    margin-bottom: 10px;
+    page-break-after: avoid;
+}
+
+h3 {
+    font-size: 11.5pt;
+    font-weight: 600;
+    color: #334155;
+    margin-top: 20px;
+    margin-bottom: 6px;
+    page-break-after: avoid;
+}
+
+h4 {
+    font-size: 10.5pt;
+    font-weight: 600;
+    color: #475569;
+    margin-top: 14px;
+    margin-bottom: 4px;
+}
+
+p { margin: 0 0 10px 0; }
+
+blockquote {
+    margin: 14px 0;
+    padding: 10px 16px;
+    border-left: 4px solid #6366f1;
+    background: #f1f5f9;
+    border-radius: 0 6px 6px 0;
+    font-style: italic;
+    color: #334155;
+}
+
+blockquote p { margin: 0; }
+
+code {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+    font-size: 9pt;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 3px;
+    padding: 1px 5px;
+    color: #7c3aed;
+}
+
+pre {
+    background: #0f172a;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin: 12px 0;
+    overflow-x: auto;
+    page-break-inside: avoid;
+}
+
+pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    color: #e2e8f0;
+    font-size: 8.5pt;
+    line-height: 1.55;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 9.5pt;
+    page-break-inside: avoid;
+}
+
+th {
+    background: #1e293b;
+    color: #f1f5f9;
+    padding: 8px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 9pt;
+}
+
+td {
+    padding: 7px 12px;
+    border-bottom: 1px solid #e2e8f0;
+    vertical-align: top;
+}
+
+tr:nth-child(even) td { background: #f8fafc; }
+tr:last-child td { border-bottom: none; }
+
+ul, ol {
+    margin: 8px 0 10px 0;
+    padding-left: 22px;
+}
+
+li { margin-bottom: 3px; }
+li > ul, li > ol { margin-top: 3px; }
+
+strong { font-weight: 600; color: #0f172a; }
+em { font-style: italic; }
+
+hr {
+    border: none;
+    border-top: 2px solid #e2e8f0;
+    margin: 24px 0;
+}
+
+a { color: #6366f1; text-decoration: none; }
+
+.cover {
+    text-align: center;
+    padding: 60px 0 40px;
+    page-break-after: always;
+}
+
+.cover h1 {
+    font-size: 32pt;
+    border: none;
+    padding: 0;
+    margin-bottom: 16px;
+    color: #0f172a;
+}
+
+.cover .subtitle {
+    font-size: 14pt;
+    color: #6366f1;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.cover .tagline {
+    font-size: 11pt;
+    color: #64748b;
+    max-width: 420px;
+    margin: 0 auto 36px;
+    line-height: 1.7;
+}
+
+.score-badge {
+    display: inline-block;
+    background: #6366f1;
+    color: white;
+    font-weight: 700;
+    font-size: 28pt;
+    padding: 16px 32px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+}
+
+.score-label {
+    font-size: 10pt;
+    color: #64748b;
+}
+
+.toc {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 0 0 20px;
+    page-break-after: always;
+}
+
+.toc h2 {
+    border: none;
+    margin-top: 0;
+    font-size: 13pt;
+    color: #0f172a;
+}
+
+.toc ol {
+    margin: 0;
+    padding-left: 20px;
+    column-count: 2;
+    column-gap: 30px;
+}
+
+.toc li {
+    font-size: 10pt;
+    margin-bottom: 5px;
+    color: #334155;
+    break-inside: avoid;
+}
+
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <h1>Harness Engineering<br/>for Claude Code</h1>
+  <div class="subtitle">A systematic guide to the infrastructure that makes AI sessions work</div>
+  <p class="tagline">
+    The model is 1.6% of what makes Claude Code effective.<br/>
+    The harness is 98.4%. This repo teaches you to build it deliberately.
+  </p>
+  <div class="score-badge">22/25</div><br/>
+  <div class="score-label">This repo's own harness audit score</div>
+</div>
+
+
+<div class="toc">
+<h2>Contents</h2>
+<ol>
+  <li>The Big Idea — why harness beats model</li>
+  <li>What a Harness Is — the four levers</li>
+  <li>Repo Structure — what is where</li>
+  <li>Where to Start — three entry points</li>
+  <li>The Karpathy Baseline — 65 lines, 94% accuracy</li>
+  <li>The Research Guides — seven in-depth references</li>
+  <li>The Templates — ready to copy and use</li>
+  <li>The Examples — real-world CLAUDE.md files</li>
+  <li>The Audit Tool — score any project 0–25</li>
+  <li>The Research Agent — interactive stretch-loop</li>
+  <li>The Slash Commands — /ultraplan /goal /agents /ultrareview</li>
+  <li>The Audit-Fix-Verify Loop — how to improve iteratively</li>
+  <li>Key Findings from the Literature</li>
+  <li>Contributing</li>
+</ol>
+</div>
+
+<h1>Harness Engineering for Claude Code</h1>
+<blockquote>
+<p><strong>One idea:</strong> The infrastructure around an AI model — not the model itself — determines whether your sessions are productive or frustrating. This repo is a systematic guide to building that infrastructure.</p>
+</blockquote>
+<hr />
+<h2>The Big Idea</h2>
+<p>When Claude Code sessions go wrong — Claude edits the wrong file, repeats a mistake, asks for approval every five seconds, or drifts off-task — the instinct is to blame the model. The research says otherwise.</p>
+<p>Analysis of Claude Code's own source code found that <strong>1.6% is AI decision logic. The remaining 98.4% is the harness</strong> — the permission pipeline, context management, tool router, and safety infrastructure wrapped around the model.</p>
+<p>Four independent teams building coding agents from scratch converged on the same architecture. When teams independently invent the same structure, that's a signal it's a <em>constraint imposed by the problem</em>, not a design preference.</p>
+<p>The Karpathy result made this concrete: a 65-line <code>CLAUDE.md</code> file with four behavioural rules moved AI coding accuracy from <strong>65% → 94%</strong>. The model didn't change. The harness did.</p>
+<p><strong>Harness engineering</strong> is the discipline of building that wrapper deliberately.</p>
+<hr />
+<h2>What a Harness Is</h2>
+<p>A Claude Code harness has four levers. You control all of them.</p>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│                      Claude Code Session                     │
+│                                                             │
+│  ┌─────────────┐   ┌──────────────┐   ┌─────────────────┐ │
+│  │  CLAUDE.md  │   │ settings.json│   │     Hooks       │ │
+│  │             │   │              │   │                 │ │
+│  │  &quot;Here is   │   │  allow: [..]  │   │ SessionStart   │ │
+│  │   what this  │   │  deny:  [..]  │   │ PreToolUse    │ │
+│  │   project    │   │  hooks: {..} │   │ PostToolUse   │ │
+│  │   is and     │   │              │   │ Stop          │ │
+│  │   how to     │   │  MCP servers │   │               │ │
+│  │   work in    │   │  registered  │   │  Shell scripts│ │
+│  │   it&quot;        │   │  here        │   │  triggered by │ │
+│  │              │   │              │   │  lifecycle    │ │
+│  └─────────────┘   └──────────────┘   └─────────────────┘ │
+│                                                             │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │                   MCP Servers                        │   │
+│  │  Custom tools exposed to Claude: GitHub API,         │   │
+│  │  database queries, search, any subprocess you want  │   │
+│  └─────────────────────────────────────────────────────┘   │
+│                                                             │
+│                        ▼                                    │
+│                  [ Claude Model ]                           │
+└─────────────────────────────────────────────────────────────┘
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Lever</th>
+<th>File</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CLAUDE.md</strong></td>
+<td><code>/CLAUDE.md</code></td>
+<td>Natural language context — what the project is, how to work in it, what not to touch</td>
+</tr>
+<tr>
+<td><strong>Permissions</strong></td>
+<td><code>.claude/settings.json</code></td>
+<td>Which commands Claude can run without asking; what is always blocked</td>
+</tr>
+<tr>
+<td><strong>Hooks</strong></td>
+<td><code>.claude/hooks/*.sh</code></td>
+<td>Shell scripts that fire at session start, before/after tool use, at session end</td>
+</tr>
+<tr>
+<td><strong>MCP Servers</strong></td>
+<td><code>.claude/settings.json</code></td>
+<td>Subprocess tools that extend Claude's capabilities beyond built-ins</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>What Is In This Repo</h2>
+<pre><code>Harness-engineering-plan/
+│
+├── research/               ← Seven in-depth guides on each harness component
+│   ├── 00-overview.md      ← Start here: the conceptual model
+│   ├── 01-claude-md-guide.md   ← How to write CLAUDE.md files that actually work
+│   ├── 02-settings-guide.md    ← settings.json schema, permission syntax, examples
+│   ├── 03-hooks-guide.md       ← Hook lifecycle, blocking hooks, shell patterns
+│   ├── 04-mcp-guide.md         ← When and how to add MCP servers
+│   ├── 05-project-types.md     ← Decision matrix: web app, API, CLI, data, monorepo
+│   ├── 06-codebase-analysis.md ← How to audit and improve an existing project
+│   └── notes/              ← Auto-saved research outputs from the agent
+│
+├── templates/              ← Ready to copy, fill in the blanks, and commit
+│   ├── CLAUDE.md.template  ← All seven sections with placeholder guidance
+│   ├── settings.json.template  ← Annotated settings with per-project-type sections
+│   └── hooks/
+│       ├── session-start.sh         ← Checks deps, env vars, services at session open
+│       ├── pre-tool-use-safety.sh   ← Blocks force push, rm -rf, curl|bash
+│       ├── post-edit-format.sh      ← Auto-formats .py/.ts/.go/.rs after every edit
+│       └── stop-hook-git-check.sh   ← Reminds Claude to commit before stopping
+│
+├── examples/               ← Real-world CLAUDE.md files you can read and copy from
+│   ├── karpathy-minimal/   ← The 65-line baseline: Think, Simplicity, Surgical, Goal
+│   ├── web-app/            ← Next.js 14 + Tailwind + shadcn/ui
+│   ├── api-service/        ← Python FastAPI + SQLAlchemy + Celery
+│   └── data-pipeline/      ← dbt + Airflow + Snowflake
+│
+├── agent/                  ← Python research tools for exploring this repo
+│   ├── main.py             ← Interactive REPL with stretch-loop research
+│   ├── parallel.py         ← Run multiple research topics simultaneously
+│   ├── audit.py            ← Score any project's harness from 0–25
+│   ├── core.py             ← Two-pass Explore → Stretch research engine
+│   ├── prompts.py          ← Research and literature-review prompts
+│   └── tools.py            ← File, search, and note-saving tools
+│
+└── .claude/                ← This repo's own harness (score: 22/25)
+    ├── settings.json       ← Permissions + hook registrations
+    ├── hooks/              ← Four deployed hook scripts
+    └── commands/           ← Four project slash commands
+        ├── ultraplan.md    ← /ultraplan: deep parallel planning before any code
+        ├── goal.md         ← /goal: set and track a session goal
+        ├── agents.md       ← /agents: parallel research on any topic list
+        └── ultrareview.md  ← /ultrareview: five-pass code review
+</code></pre>
+<hr />
+<h2>Where to Start</h2>
+<p><strong>You are new to harness engineering:</strong><br />
+Read <code>research/00-overview.md</code> (10 min). It explains the mental model and why each lever exists.</p>
+<p><strong>You want to set up a new project right now:</strong><br />
+1. Copy <code>examples/karpathy-minimal/CLAUDE.md</code> to your project root — this is the baseline<br />
+2. Fill in your project-specific sections from <code>templates/CLAUDE.md.template</code><br />
+3. Copy <code>templates/settings.json.template</code> to <code>.claude/settings.json</code> and uncomment what applies<br />
+4. Add one hook: <code>templates/hooks/session-start.sh</code> → <code>.claude/hooks/session-start.sh</code></p>
+<p><strong>You have an existing project and want to know how healthy its harness is:</strong></p>
+<pre><code class="language-bash">pip install -r requirements-agent.txt
+python agent/audit.py /path/to/your/project
+</code></pre>
+<p>This scores the harness across five layers (0–5 each) and gives you a prioritised fix list.</p>
+<p><strong>You want to research a specific harness topic interactively:</strong></p>
+<pre><code class="language-bash">export ANTHROPIC_API_KEY=sk-ant-...
+python agent/main.py
+# Then ask: &quot;What hooks should a Python FastAPI project use?&quot;
+</code></pre>
+<hr />
+<h2>The Karpathy Baseline</h2>
+<p>Before writing anything project-specific, start with these four rules. They are in <code>examples/karpathy-minimal/CLAUDE.md</code> and are the minimum viable harness for any project.</p>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>The mistake it prevents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Think Before Coding</strong> — state assumptions; ask when confused</td>
+<td>Silently guessing wrong → wrong implementation</td>
+</tr>
+<tr>
+<td><strong>Simplicity First</strong> — minimum code; no speculative abstractions</td>
+<td>Over-engineering a two-line fix into a framework</td>
+</tr>
+<tr>
+<td><strong>Surgical Changes</strong> — only touch what the task requires</td>
+<td>"Improving" adjacent code and breaking it</td>
+</tr>
+<tr>
+<td><strong>Goal-Driven Execution</strong> — define done before starting</td>
+<td>Endless iteration with no clear exit condition</td>
+</tr>
+</tbody>
+</table>
+<p>Merge these into every CLAUDE.md you write. Then add your project-specific sections on top.</p>
+<hr />
+<h2>The Research Guides</h2>
+<table>
+<thead>
+<tr>
+<th>Guide</th>
+<th>What you'll learn</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>00-overview.md</code></td>
+<td>The harness model, the four levers, why harness quality dominates model quality</td>
+</tr>
+<tr>
+<td><code>01-claude-md-guide.md</code></td>
+<td>The seven essential sections, anti-patterns (stale content, documenting obvious things), the Karpathy baseline, a readiness checklist</td>
+</tr>
+<tr>
+<td><code>02-settings-guide.md</code></td>
+<td>Full settings.json schema, permission syntax (<code>Bash(git log *)</code> vs <code>Bash(*)</code>), per-project defaults, the deny-list patterns that matter</td>
+</tr>
+<tr>
+<td><code>03-hooks-guide.md</code></td>
+<td>The four lifecycle events, how blocking hooks work (<code>{"decision": "block"}</code>), idempotency, keeping hooks fast</td>
+</tr>
+<tr>
+<td><code>04-mcp-guide.md</code></td>
+<td>When MCP beats Bash tools, how to register servers, common servers (GitHub, PostgreSQL, SQLite), building a custom one</td>
+</tr>
+<tr>
+<td><code>05-project-types.md</code></td>
+<td>Decision matrix across five project types — which harness components matter most for each</td>
+</tr>
+<tr>
+<td><code>06-codebase-analysis.md</code></td>
+<td>The audit-fix-verify loop, scoring matrix, common anti-patterns in real codebases, the repeating improvement workflow</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>The Templates</h2>
+<table>
+<thead>
+<tr>
+<th>Template</th>
+<th>Use it when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>templates/CLAUDE.md.template</code></td>
+<td>Starting a CLAUDE.md from scratch — fill in the <code>{{PLACEHOLDERS}}</code></td>
+</tr>
+<tr>
+<td><code>templates/settings.json.template</code></td>
+<td>Setting up <code>.claude/settings.json</code> — uncomment the sections that apply</td>
+</tr>
+<tr>
+<td><code>templates/hooks/session-start.sh</code></td>
+<td>Automating dep install + env var checks when sessions open</td>
+</tr>
+<tr>
+<td><code>templates/hooks/pre-tool-use-safety.sh</code></td>
+<td>Blocking destructive commands before Claude can run them</td>
+</tr>
+<tr>
+<td><code>templates/hooks/post-edit-format.sh</code></td>
+<td>Auto-formatting every file Claude edits (Python, TypeScript, Go, Rust, shell)</td>
+</tr>
+<tr>
+<td><code>templates/hooks/stop-hook-git-check.sh</code></td>
+<td>Reminding Claude to commit before ending a session</td>
+</tr>
+</tbody>
+</table>
+<p><strong>How to install a hook:</strong></p>
+<pre><code class="language-bash">mkdir -p .claude/hooks
+cp templates/hooks/session-start.sh .claude/hooks/session-start.sh
+chmod +x .claude/hooks/session-start.sh
+# Edit the REQUIRED_VARS array for your project's env vars
+</code></pre>
+<p>Then register it in <code>.claude/settings.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;hooks&quot;: {
+    &quot;SessionStart&quot;: [{ &quot;command&quot;: &quot;.claude/hooks/session-start.sh&quot; }]
+  }
+}
+</code></pre>
+<hr />
+<h2>The Examples</h2>
+<p>All four examples are complete, real-world CLAUDE.md files you can read and adapt:</p>
+<h3><code>examples/karpathy-minimal/</code> — The baseline</h3>
+<p>65 lines. Four behavioural rules derived from Andrej Karpathy's coding principles.<br />
+Reported to improve AI coding accuracy from 65% → 94%. Start here.</p>
+<h3><code>examples/web-app/</code> — Next.js 14 frontend</h3>
+<p>Covers: App Router structure, pnpm-only (delete package-lock.json if you see it), auto-generated <code>lib/api/</code> (never edit by hand), shadcn/ui CLI for component additions, Turbopack fallback, Mapbox HTTPS requirement.</p>
+<h3><code>examples/api-service/</code> — Python FastAPI backend</h3>
+<p>Covers: async SQLAlchemy session scoping, Alembic autogenerate gaps (array columns, hypertables), Celery task testing with <code>.apply()</code> not <code>.delay()</code>, TimescaleDB vs plain Postgres distinction.</p>
+<h3><code>examples/data-pipeline/</code> — dbt + Airflow</h3>
+<p>Covers: never <code>dbt run --target prod</code> locally, <code>dbt deps</code> after pulling packages.yml changes, <code>profiles.yml</code> not committed, Airflow DAG bag parse errors, Snowflake zero-copy cloning.</p>
+<hr />
+<h2>The Audit Tool</h2>
+<p><code>agent/audit.py</code> scores any project's harness across five layers:</p>
+<pre><code>python agent/audit.py /path/to/your/project
+python agent/audit.py . --save     ← saves report to research/notes/
+</code></pre>
+<pre><code>  Layer                   Score   Bar
+ ────────────────────────────────────
+  CLAUDE.md                4/5    ████████░░
+  settings.json            3/5    ██████░░░░
+  Hooks                    1/5    ██░░░░░░░░
+  Architecture Context     2/5    ████░░░░░░
+  Environment &amp; Secrets    2/5    ████░░░░░░
+
+  Total                   12/25
+</code></pre>
+<p>It then outputs a prioritised list of exactly what to fix and how.<br />
+Run it repeatedly as you improve things — the score tracks your progress.</p>
+<p><strong>Scoring guide:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Total score</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0–5</td>
+<td>No harness — Claude is operating blind</td>
+</tr>
+<tr>
+<td>6–10</td>
+<td>Minimal harness — some context, no safety</td>
+</tr>
+<tr>
+<td>11–15</td>
+<td>Developing harness — foundational pieces in place</td>
+</tr>
+<tr>
+<td>16–20</td>
+<td>Good harness — productive sessions, safety covered</td>
+</tr>
+<tr>
+<td>21–25</td>
+<td>Strong harness — Claude operates with high autonomy and few mistakes</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>The Research Agent</h2>
+<pre><code class="language-bash">pip install -r requirements-agent.txt
+export ANTHROPIC_API_KEY=sk-ant-...
+python agent/main.py
+</code></pre>
+<p>The agent uses Claude Opus 4.7 with a two-pass <strong>stretch loop</strong>:</p>
+<ol>
+<li><strong>EXPLORE</strong> — Claude reads repo files using tools, writes a draft answer</li>
+<li><strong>STRETCH</strong> — Claude critiques its own draft, finds what it missed, writes a final improved answer</li>
+</ol>
+<p>The final answer is always better than the first draft.</p>
+<pre><code>&gt; What hooks should a Python FastAPI project use?
+&gt; parallel: CLAUDE.md sections, hook patterns, MCP servers   ← runs 3 topics at once
+&gt; parallel                                                    ← runs 5 default topics
+&gt; any question  save                                          ← auto-saves the answer
+</code></pre>
+<p><strong>Parallel research</strong> (<code>python agent/parallel.py</code>) fires multiple topics simultaneously using async API calls and shows a live status table. Results save to <code>research/notes/</code> as dated markdown files.</p>
+<hr />
+<h2>The Slash Commands</h2>
+<p>Once you have opened this repo in Claude Code, four custom commands are available from the <code>/</code> menu:</p>
+<h3><code>/ultraplan &lt;task&gt;</code></h3>
+<p>Before writing any code, this runs a four-phase research loop:<br />
+- Phase 1: three Explore agents run in parallel, each with a distinct focus (relevant files / reusable utilities / blast radius)<br />
+- Phase 2: designs the implementation with dependency-safe ordering<br />
+- Phase 3: writes a structured plan document to <code>/tmp/ultraplan-current.md</code><br />
+- Phase 4: presents the plan and waits for your approval before touching anything</p>
+<p>Use this for any task where getting the plan wrong would be expensive.</p>
+<h3><code>/goal &lt;goal description&gt;</code></h3>
+<p>Sets the session goal. Claude writes it to <code>.claude/session-goal.md</code> with verifiable completion criteria, checks the current git state, and then checks every subsequent action against the goal. At session end, it records what was accomplished.</p>
+<h3><code>/agents &lt;topic1, topic2, topic3&gt;</code></h3>
+<p>Runs parallel research on a comma-separated list of topics. Uses <code>python agent/parallel.py</code> if available, otherwise spawns Explore sub-agents directly. Synthesises all findings into a structured report and offers to save it.</p>
+<h3><code>/ultrareview &lt;file or directory&gt;</code></h3>
+<p>Five sequential review passes: Correctness → Security → Performance → Style → Test Coverage. Every finding is reported with file path, line number, severity (CRITICAL/MAJOR/MINOR/SUGGESTION), and a specific fix. Saves the full report to <code>research/notes/</code>.</p>
+<hr />
+<h2>The Audit-Fix-Verify Loop</h2>
+<p>The right way to improve any project's harness is iteratively, not all at once:</p>
+<pre><code>AUDIT → find the gaps
+  ↓
+FIX → address the highest-priority gap (one layer at a time)
+  ↓
+VERIFY → re-run the audit; score should go up
+  ↓
+repeat until score ≥ 18/25 or sessions feel right
+</code></pre>
+<p><strong>Priority order</strong> — tackle gaps in this sequence:</p>
+<ol>
+<li>CLAUDE.md exists at all</li>
+<li>Karpathy baseline rules merged in</li>
+<li>Destructive-command deny rules (force push, rm -rf, reset --hard)</li>
+<li>SessionStart hook (dep + env checks)</li>
+<li>Project-specific gotchas (stop repeating the same Claude mistakes)</li>
+<li>PreToolUse safety guard</li>
+<li>PostToolUse auto-formatter</li>
+<li>Scoped allow list (tighten after a week of real sessions)</li>
+<li>MCP servers (only when a clear friction point exists)</li>
+<li>Stop hook</li>
+</ol>
+<hr />
+<h2>Key Findings from the Literature</h2>
+<p>These are the most important empirical results documented in <code>research/notes/harness-engineering-literature.md</code>:</p>
+<p><strong>The 98% rule:</strong> Claude Code's source is 1.6% AI decision logic. 98.4% is harness. If your sessions feel unreliable, the answer is almost certainly in your harness, not the model.</p>
+<p><strong>Independent convergence:</strong> Four teams building coding agents independently arrived at the same architecture: outer loop → tool execution → result capture, ~12 primitive tools, multi-stage permission pipeline. This is a constraint, not a preference.</p>
+<p><strong>Performance impact:</strong> On Terminal Bench 2.0, one team moved a coding agent from Top 30 to Top 5 by changing <em>only</em> the harness. The model was identical.</p>
+<p><strong>The Karpathy result:</strong> 65 lines, 4 rules, 65% → 94% accuracy. The model didn't change.</p>
+<hr />
+<h2>Contributing</h2>
+<p>This is a living research document. When you discover a useful pattern — a new hook technique, a gotcha in a project type not yet covered, a better permission pattern — add it:</p>
+<ol>
+<li>Add the pattern to the relevant <code>research/0N-*.md</code> guide</li>
+<li>If it's a reusable template, add it to <code>templates/</code></li>
+<li>If it's a new project-type example, add a <code>examples/your-type/CLAUDE.md</code></li>
+<li>Update the status checklist in <code>CLAUDE.md</code></li>
+</ol>
+<p>Follow the existing heading and structure conventions in each file. The goal is that every entry is immediately usable by someone who reads it, not just conceptually interesting.</p>
+<hr />
+<h2>This Repo's Own Harness Score</h2>
+<pre><code>  CLAUDE.md                5/5    ██████████
+  settings.json            4/5    ████████░░
+  Hooks                    5/5    ██████████
+  Architecture Context     4/5    ████████░░
+  Environment &amp; Secrets    4/5    ████████░░
+
+  Total                   22/25
+</code></pre>
+<p>Run <code>python agent/audit.py .</code> to see the current score and what remains to improve.</p>
+</body>
+</html>
