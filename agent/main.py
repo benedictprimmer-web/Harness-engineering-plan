@@ -14,6 +14,7 @@ Usage:
 
 from __future__ import annotations
 
+import asyncio
 import re
 import sys
 from datetime import datetime
@@ -28,6 +29,8 @@ from rich.panel import Panel
 from rich.prompt import Prompt
 
 from agent.core import ResearchAgent
+from agent.parallel import build_report, run_parallel
+from agent.prompts import DEFAULT_TOPICS
 from agent.tools import save_note
 
 BANNER = """\
@@ -35,8 +38,10 @@ BANNER = """\
 [dim]Claude Opus 4.7 · Adaptive Thinking · Two-pass Stretch Loop[/dim]
 
 Ask anything about configuring Claude Code for software projects.
-Append [bold]save[/bold] to your question to auto-save the answer, e.g.:
-  [italic]What hooks should a Python API project use?  save[/italic]
+Append [bold]save[/bold] to auto-save the answer.
+
+[bold]parallel:[/bold] [dim]topic1, topic2, ...[/dim]  run a parallel literature review
+[bold]parallel[/bold]                           run the default 5-topic literature review
 
 Type [bold]quit[/bold] or press Ctrl-C to exit.\
 """
@@ -61,6 +66,30 @@ def main() -> None:
         if raw.lower() in ("quit", "exit", "q"):
             console.print("[dim]bye[/dim]")
             break
+
+        # ── parallel literature review ──────────────────────────────────────
+        if raw.lower().startswith("parallel"):
+            rest = raw[len("parallel"):].lstrip(": ").strip()
+            topics = [t.strip() for t in rest.split(",") if t.strip()] or DEFAULT_TOPICS
+            try:
+                results = asyncio.run(run_parallel(topics, console))
+                label = rest or "Harness engineering — default topics"
+                report = build_report(label, results)
+                for topic, answer in results:
+                    console.print(
+                        Panel(
+                            Markdown(answer),
+                            title=f"[bold green]{topic[:70]}[/bold green]",
+                            border_style="green",
+                        )
+                    )
+                date = datetime.now().strftime("%Y%m%d-%H%M")
+                saved = save_note(f"{date}-parallel-research.md", report)
+                console.print(f"[green]✓ {saved}[/green]")
+            except KeyboardInterrupt:
+                console.print("\n[yellow]Interrupted[/yellow]")
+            continue
+        # ────────────────────────────────────────────────────────────────────
 
         auto_save = raw.lower().endswith(" save")
         question = raw[:-5].strip() if auto_save else raw
