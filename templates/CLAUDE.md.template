@@ -1,0 +1,102 @@
+# {{PROJECT_NAME}}
+
+## Project
+
+{{PROJECT_DESCRIPTION}}
+<!-- 2-4 sentences: what the project does, who uses it, what problem it solves.
+     Be specific: "a React app" < "a customer-facing dashboard for X used by Y" -->
+
+## Stack
+
+- **Runtime**: {{RUNTIME_AND_VERSION}}
+- **Framework**: {{FRAMEWORK_AND_VERSION}}
+- **Testing**: {{TEST_FRAMEWORK}}
+- **Linting**: {{LINTER}}
+<!-- Add: UI library, state management, ORM, migration tool, task queue, etc. -->
+<!-- Include exact versions — Claude uses them to avoid deprecated APIs -->
+
+## Commands
+
+```bash
+{{INSTALL_COMMAND}}        # install dependencies
+{{DEV_COMMAND}}            # start dev server / run locally
+{{BUILD_COMMAND}}          # production build (if applicable)
+{{TEST_COMMAND}}           # run all tests
+{{TEST_WATCH_COMMAND}}     # tests in watch mode (if available)
+{{LINT_COMMAND}}           # lint + type check
+{{LINT_FIX_COMMAND}}       # auto-fix lint issues
+```
+<!-- Add any project-specific commands: generate:api, migrate, seed, storybook, etc. -->
+
+## Architecture
+
+```
+{{KEY_DIRECTORY_1}}/    ← {{DESCRIPTION_1}}
+{{KEY_DIRECTORY_2}}/    ← {{DESCRIPTION_2}}
+{{KEY_DIRECTORY_3}}/    ← {{DESCRIPTION_3}}
+```
+<!-- Focus on non-obvious structure. Note auto-generated directories. -->
+<!-- Example: "lib/api/ — generated API client, don't edit by hand" -->
+
+## Conventions
+
+- **{{CONVENTION_TOPIC_1}}**: {{CONVENTION_DETAIL_1}}
+- **{{CONVENTION_TOPIC_2}}**: {{CONVENTION_DETAIL_2}}
+<!-- Examples:
+  - Imports: use @/ alias (not relative ../../)
+  - Components: named exports only, one per file
+  - Styling: Tailwind only, no CSS modules
+  - API calls: always go through lib/api/, never raw fetch
+  - Dates: use date-fns, never new Date() arithmetic directly
+-->
+
+## Environment
+
+Copy `{{ENV_EXAMPLE_FILE}}` to `{{ENV_FILE}}` and fill in:
+- `{{ENV_VAR_1}}` — {{ENV_VAR_1_DESCRIPTION}}
+- `{{ENV_VAR_2}}` — {{ENV_VAR_2_DESCRIPTION}}
+<!-- Note where to find secrets (1Password, team channel, etc.) -->
+<!-- Flag which vars are optional vs. required for local dev -->
+
+## Gotchas
+
+- **{{GOTCHA_1_TITLE}}**: {{GOTCHA_1_DETAIL}}
+- **{{GOTCHA_2_TITLE}}**: {{GOTCHA_2_DETAIL}}
+- **{{GOTCHA_3_TITLE}}**: {{GOTCHA_3_DETAIL}}
+<!-- This is the highest-value section. Capture:
+  - Wrong package manager (npm vs pnpm vs yarn)
+  - Port conflicts
+  - Auto-generated files that must not be edited
+  - Known flaky tests or broken tooling
+  - Things that look broken but are intentional
+  - Steps that must happen in a specific order
+-->
+
+<!-- OPTIONAL SECTIONS — add if relevant: -->
+
+<!--
+## Testing
+
+{{TESTING_STRATEGY}}
+- Unit tests: {{UNIT_TEST_LOCATION}}
+- Integration tests: {{INTEGRATION_TEST_LOCATION}}
+- Fixtures: {{FIXTURES_LOCATION}}
+- Mocks: {{MOCKS_APPROACH}}
+-->
+
+<!--
+## Deployment
+
+- Dev: {{DEV_DEPLOY_PROCESS}}
+- Staging: {{STAGING_DEPLOY_PROCESS}}
+- Production: {{PROD_DEPLOY_PROCESS}}
+- Branch → environment mapping: {{BRANCH_ENV_MAPPING}}
+-->
+
+<!--
+## External Services
+
+| Service | Purpose | Local mock |
+|---------|---------|------------|
+| {{SERVICE_1}} | {{PURPOSE_1}} | {{MOCK_1}} |
+-->

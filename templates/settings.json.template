@@ -1,0 +1,160 @@
+{
+  "permissions": {
+    "allow": [
+      // ── Always include these ────────────────────────────────────────────
+      "Read(*)",               // reading files is always safe
+      "Bash(git status)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(git pull *)",
+      "Bash(git checkout *)",
+      "Bash(git branch *)",
+      "Bash(git fetch *)",
+      "Bash(git stash *)",
+      "Bash(ls *)",
+      "Bash(find . *)",
+      "Bash(grep *)",
+      "Bash(cat *)",
+      "Bash(echo *)",
+      "Bash(pwd)",
+      "Bash(which *)",
+      "Bash(mkdir -p *)",
+      "Bash(chmod *)",
+
+      // ── Node.js projects ────────────────────────────────────────────────
+      // INCLUDE if: package.json exists
+      "Bash(pnpm *)",          // preferred: use pnpm, npm, or yarn — pick one
+      "Bash(npx *)",
+      "Bash(node *)",
+
+      // ── Python projects ─────────────────────────────────────────────────
+      // INCLUDE if: requirements.txt or pyproject.toml exists
+      "Bash(python *)",
+      "Bash(python3 *)",
+      "Bash(pip *)",
+      "Bash(pip3 *)",
+      "Bash(pytest *)",
+      "Bash(ruff *)",
+      "Bash(mypy *)",
+      "Bash(uv *)",
+
+      // ── Docker ──────────────────────────────────────────────────────────
+      // INCLUDE if: docker-compose.yml exists
+      "Bash(docker compose *)",
+      "Bash(docker build *)",
+      "Bash(docker ps)",
+      "Bash(docker logs *)",
+
+      // ── Project-specific build commands ─────────────────────────────────
+      // REPLACE these with your actual commands
+      "Bash({{BUILD_COMMAND}} *)",
+      "Bash({{TEST_COMMAND}} *)",
+      "Bash({{LINT_COMMAND}} *)",
+
+      // ── File editing scope ───────────────────────────────────────────────
+      // NARROW these to only the directories Claude should edit
+      "Edit(src/**)",
+      "Edit(app/**)",
+      "Edit(tests/**)",
+      "Write(tmp/**)",
+      "Write(dist/**)"
+    ],
+    "deny": [
+      // ── Always deny these ───────────────────────────────────────────────
+      "Bash(git push --force *)",
+      "Bash(git push * --force)",
+      "Bash(git reset --hard *)",
+
+      // ── Project-specific deny rules ─────────────────────────────────────
+      // UNCOMMENT / ADD as needed:
+      // "Bash(dbt run --full-refresh --target prod *)",
+      // "Bash(DROP TABLE *)",
+      // "Bash(DELETE FROM * WHERE 1=1)",
+      // "Bash(rm -rf src *)"
+    ]
+  },
+
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/session-start.sh"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/pre-tool-use-safety.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/post-edit-format.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/stop-hook-git-check.sh"
+          }
+        ]
+      }
+    ]
+  },
+
+  "env": {
+    // ── Set project-specific env vars here ────────────────────────────────
+    // These are injected into all Claude tool calls.
+    // Use ${VAR} to reference existing environment variables.
+    // NEVER hard-code secrets — use ${SECRET_VAR} references.
+
+    // "NODE_ENV": "development",
+    // "PYTHONPATH": "./src",
+    // "DATABASE_URL": "${DATABASE_URL}",
+    // "LOG_LEVEL": "debug"
+  },
+
+  "mcpServers": {
+    // ── Uncomment and configure MCP servers as needed ─────────────────────
+
+    // GitHub integration (read/write PRs, issues, files)
+    // "github": {
+    //   "command": "npx",
+    //   "args": ["-y", "@modelcontextprotocol/server-github"],
+    //   "env": { "GITHUB_TOKEN": "${GITHUB_TOKEN}" }
+    // },
+
+    // PostgreSQL database access
+    // "postgres": {
+    //   "command": "npx",
+    //   "args": ["-y", "@modelcontextprotocol/server-postgres"],
+    //   "env": { "POSTGRES_CONNECTION_STRING": "${DATABASE_URL}" }
+    // },
+
+    // SQLite database access
+    // "sqlite": {
+    //   "command": "npx",
+    //   "args": ["-y", "@modelcontextprotocol/server-sqlite", "./data/local.db"]
+    // }
+  }
+}
