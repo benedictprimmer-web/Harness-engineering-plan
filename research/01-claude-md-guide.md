@@ -159,6 +159,33 @@ states. The shadcn version doesn't match the design spec.
 ### Documenting things Claude already knows
 Don't tell Claude how React works, what TypeScript is, or how git commits work. Use CLAUDE.md for project-specific knowledge only.
 
+## The Karpathy Baseline: 4 Rules, 65 Lines
+
+Before writing a full project-specific CLAUDE.md, know the minimum viable version. In May 2026, Forrest Chang's adaptation of Andrej Karpathy's coding principles hit #1 on GitHub trending (220k+ combined stars). The reported impact: AI coding accuracy from **65% → 94%** with 65 lines of plain text.
+
+The four rules address the most common LLM coding failure modes:
+
+| Rule | What it prevents |
+|------|-----------------|
+| **Think Before Coding** — state assumptions, surface tradeoffs, ask when confused | Silent wrong assumptions → wrong output |
+| **Simplicity First** — minimum code, no speculative features, no unasked-for abstractions | Over-engineering and unnecessary complexity |
+| **Surgical Changes** — touch only what the task requires, don't "improve" adjacent code | Unasked-for refactors that break things |
+| **Goal-Driven Execution** — convert vague tasks to verifiable success criteria, plan before acting | Drift and tasks with no clear exit condition |
+
+See the full text at `examples/karpathy-minimal/CLAUDE.md`. Use it as your starting point and merge your project-specific sections on top.
+
+```markdown
+# Merge order
+
+1. Start with examples/karpathy-minimal/CLAUDE.md  (behavioural baseline)
+2. Add your Stack, Commands, Architecture, Environment, Gotchas sections
+3. Remove anything that duplicates what's already in the baseline
+```
+
+The four rules also explain why the seven-section template works: sections like "Gotchas" exist specifically to feed Claude the assumptions it would otherwise make silently (Rule 1), and "Conventions" exists to enforce surgical changes by telling Claude what the existing style actually is (Rule 3).
+
+---
+
 ## Checklist: Is Your CLAUDE.md Ready?
 
 - [ ] Project identity clearly stated (1 paragraph)
