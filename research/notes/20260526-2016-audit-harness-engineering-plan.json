@@ -1,0 +1,77 @@
+{
+  "project": "Harness-engineering-plan",
+  "project_path": "/home/user/Harness-engineering-plan",
+  "timestamp": "2026-05-26 20:16",
+  "total": 23,
+  "max": 25,
+  "pct": 92,
+  "layers": [
+    {
+      "name": "CLAUDE.md",
+      "score": 5,
+      "max": 5,
+      "findings": [
+        "Found 5 CLAUDE.md file(s)",
+        "102 lines; 7/7 sections present",
+        "Sections found: project, stack, commands, architecture, conventions, environment, gotchas",
+        "Karpathy behavioural rules detected",
+        "14 formatted gotchas found"
+      ],
+      "gaps": [],
+      "fixes": []
+    },
+    {
+      "name": "settings.json",
+      "score": 5,
+      "max": 5,
+      "findings": [
+        "10 allow rule(s), 6 deny rule(s), 4 hook event(s)",
+        "Scoped allow rules present",
+        "Deny rules: ['Bash(git push --force*)', 'Bash(git push -f *)', 'Bash(git reset --hard*)']",
+        "10 command-scoped rule(s)",
+        "Hook events configured: ['SessionStart', 'PreToolUse', 'PostToolUse', 'Stop']"
+      ],
+      "gaps": [
+        "No MCP servers configured \u2014 consider adding GitHub, database, or search tools"
+      ],
+      "fixes": []
+    },
+    {
+      "name": "Hooks",
+      "score": 5,
+      "max": 5,
+      "findings": [
+        "4 script(s) in .claude/hooks/; events registered: ['SessionStart', 'PreToolUse', 'PostToolUse', 'Stop']",
+        "Events covered: ['SessionStart', 'PreToolUse', 'PostToolUse', 'Stop']",
+        "No common hook anti-patterns detected"
+      ],
+      "gaps": [],
+      "fixes": []
+    },
+    {
+      "name": "Architecture Context",
+      "score": 4,
+      "max": 5,
+      "findings": [
+        "Directory tree has inline annotations",
+        "Explicit boundary/constraint language found",
+        "Naming conventions documented"
+      ],
+      "gaps": [],
+      "fixes": []
+    },
+    {
+      "name": "Environment & Secrets",
+      "score": 4,
+      "max": 5,
+      "findings": [
+        ".env.example present",
+        "Environment section present in CLAUDE.md",
+        "Credential sourcing instructions present"
+      ],
+      "gaps": [],
+      "fixes": []
+    }
+  ],
+  "priority_actions": []
+}

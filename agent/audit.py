@@ -65,6 +65,38 @@ class AuditReport:
     def weakest_layer(self) -> LayerResult:
         return min(self.layers, key=lambda r: r.score / r.max_score)
 
+    def to_dict(self) -> dict:
+        all_fixes: list[tuple[int, str, str]] = []
+        for i, r in enumerate(self.layers):
+            priority = (r.max_score - r.score) * 10 + (5 - i)
+            for fix in r.fixes:
+                all_fixes.append((priority, fix, r.name))
+        all_fixes.sort(reverse=True)
+
+        return {
+            "project": self.project_path.resolve().name,
+            "project_path": str(self.project_path.resolve()),
+            "timestamp": self.timestamp,
+            "total": self.total_score,
+            "max": self.max_total,
+            "pct": round(self.total_score / self.max_total * 100),
+            "layers": [
+                {
+                    "name": r.name,
+                    "score": r.score,
+                    "max": r.max_score,
+                    "findings": r.findings,
+                    "gaps": r.gaps,
+                    "fixes": r.fixes,
+                }
+                for r in self.layers
+            ],
+            "priority_actions": [
+                {"rank": i + 1, "action": fix, "layer": layer, "score_gain": 1}
+                for i, (_, fix, layer) in enumerate(all_fixes[:7])
+            ],
+        }
+
 
 # --------------------------------------------------------------------------- #
 # Audit logic — one function per layer
@@ -127,8 +159,9 @@ def audit_claude_md(root: Path) -> LayerResult:
         score = min(score + 1, 4)
         result.findings.append("Karpathy behavioural rules detected")
 
-    # Gotchas quality
-    gotcha_count = len(re.findall(r"^[-*]\s+\*\*", text, re.M))
+    # Gotchas quality — skip unfilled {{PLACEHOLDER}} lines
+    raw_gotchas = re.findall(r"^[-*]\s+\*\*(.+?)\*\*", text, re.M)
+    gotcha_count = len([g for g in raw_gotchas if "{{" not in g])
     if gotcha_count >= 3 and score >= 3:
         score = min(score + 1, 5)
         result.findings.append(f"{gotcha_count} formatted gotchas found")
@@ -203,15 +236,27 @@ def audit_settings(root: Path) -> LayerResult:
             " Bash(curl * | bash), Bash(wget * | bash)"
         )
 
-    # Scoping check
-    scoped = [r for r in allow if r.count("(") and "*" not in r.split("(")[1].rstrip(")")]
+    # Scoping check — any rule that restricts to a specific command prefix counts
+    unscoped_patterns = {"Bash(*)", "Bash(* *)", "Bash(*)"}
+    scoped = [r for r in allow if r.count("(") and r not in unscoped_patterns and not r.endswith("(*)")]
     if scoped and score >= 3:
         score = 4
-        result.findings.append(f"{len(scoped)} fully-scoped rule(s) (no wildcard)")
+        result.findings.append(f"{len(scoped)} command-scoped rule(s)")
 
     if hooks:
         score = min(score + 1, 5)
         result.findings.append(f"Hook events configured: {list(hooks.keys())}")
+
+    # MCP server bonus (informational — awards final point if otherwise maxed)
+    mcp_servers = settings.get("mcpServers", {})
+    if mcp_servers:
+        result.findings.append(f"{len(mcp_servers)} MCP server(s) configured: {list(mcp_servers.keys())}")
+        if score >= 4:
+            score = 5
+    else:
+        result.gaps.append(
+            "No MCP servers configured — consider adding GitHub, database, or search tools"
+        )
 
     result.score = score
 
@@ -231,13 +276,20 @@ def audit_hooks(root: Path) -> LayerResult:
     if (claude_dir / "hooks").exists():
         hook_scripts = list((claude_dir / "hooks").glob("*.sh"))
 
-    # Check settings.json for registered hooks
+    # Check settings.json for registered hooks + validate files exist on disk
     settings_path = claude_dir / "settings.json"
     registered_events: list[str] = []
+    ghost_hooks: list[str] = []
     if settings_path.exists():
         try:
             s = json.loads(settings_path.read_text())
             registered_events = list(s.get("hooks", {}).keys())
+            for event, handlers in s.get("hooks", {}).items():
+                for handler in handlers if isinstance(handlers, list) else []:
+                    if isinstance(handler, dict) and "command" in handler:
+                        cmd_path = handler["command"].split()[0]
+                        if not (root / cmd_path).exists():
+                            ghost_hooks.append(f"{event}: '{cmd_path}' not found on disk")
         except Exception:
             pass
 
@@ -281,7 +333,11 @@ def audit_hooks(root: Path) -> LayerResult:
         if "npm install" in content and "node_modules" not in content:
             issues.append(f"{script.name}: runs npm install unconditionally (slow — add a node_modules check)")
 
-    if not issues and score >= 4:
+    if ghost_hooks:
+        result.gaps.extend(ghost_hooks)
+        result.fixes.append("Create the missing hook script files referenced in settings.json")
+
+    if not issues and not ghost_hooks and score >= 4:
         score = 5
         result.findings.append("No common hook anti-patterns detected")
     elif issues:
@@ -333,8 +389,9 @@ def audit_architecture(root: Path) -> LayerResult:
     arch_text = arch_match.group(2)
     score = 1
 
-    # Has annotations (← comments or descriptions)
-    if "←" in arch_text or "—" in arch_text or "#" in arch_text:
+    # Has annotations — require ← or — on an actual directory/file line, not just anywhere
+    has_annotations = bool(re.search(r"^\s*[\w./@-]+/?.*[←—]", arch_text, re.M))
+    if has_annotations:
         score = 2
         result.findings.append("Directory tree has inline annotations")
 
@@ -538,21 +595,103 @@ def render_report(report: AuditReport, console: Console) -> str:
 # --------------------------------------------------------------------------- #
 
 
+def _notes_dir() -> Path:
+    d = REPO_ROOT / "research" / "notes"
+    d.mkdir(parents=True, exist_ok=True)
+    return d
+
+
+def cmd_history(console: Console) -> None:
+    """Show score trend from saved audit JSON files."""
+    records = sorted(_notes_dir().glob("*-audit-*.json"))
+    if not records:
+        console.print("[yellow]No audit history found. Run with --save to start tracking.[/yellow]")
+        return
+
+    table = Table(box=box.SIMPLE_HEAD, title="Audit History")
+    table.add_column("Date")
+    table.add_column("Project")
+    table.add_column("Score", justify="center")
+    table.add_column("Bar")
+
+    for p in records:
+        try:
+            d = json.loads(p.read_text())
+            score, mx = d["total"], d["max"]
+            c = colour(score, mx)
+            bar = score_bar(score, mx)
+            table.add_row(
+                d.get("timestamp", p.stem[:13]),
+                d.get("project", "?"),
+                f"[{c}]{score}/{mx}[/{c}]",
+                f"[{c}]{bar}[/{c}]",
+            )
+        except Exception:
+            pass
+    console.print(table)
+
+
+def cmd_compare(current: dict, prev_path: Path, console: Console) -> None:
+    """Diff current audit against a saved JSON."""
+    try:
+        prev = json.loads(prev_path.read_text())
+    except Exception as e:
+        console.print(f"[red]Cannot read {prev_path}: {e}[/red]")
+        return
+
+    console.print(f"\n[bold]Comparing[/bold] vs {prev_path.name}\n")
+    prev_by_name = {l["name"]: l for l in prev.get("layers", [])}
+
+    table = Table(box=box.SIMPLE_HEAD)
+    table.add_column("Layer")
+    table.add_column("Before", justify="center")
+    table.add_column("After", justify="center")
+    table.add_column("Delta", justify="center")
+
+    total_delta = current["total"] - prev.get("total", 0)
+    for layer in current["layers"]:
+        name = layer["name"]
+        after = layer["score"]
+        before = prev_by_name.get(name, {}).get("score", "?")
+        if isinstance(before, int):
+            delta = after - before
+            d_str = f"[green]+{delta}[/green]" if delta > 0 else (f"[red]{delta}[/red]" if delta < 0 else "[dim]—[/dim]")
+        else:
+            d_str = "[dim]?[/dim]"
+        table.add_row(name, str(before), str(after), d_str)
+
+    d_str = f"[green]+{total_delta}[/green]" if total_delta > 0 else (f"[red]{total_delta}[/red]" if total_delta < 0 else "[dim]0[/dim]")
+    table.add_row("[bold]Total[/bold]", str(prev.get("total", "?")), str(current["total"]), d_str)
+    console.print(table)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Audit a project's Claude Code harness")
-    parser.add_argument("project", help="Path to the project root")
+    parser.add_argument("project", nargs="?", default=".", help="Path to the project root (default: .)")
     parser.add_argument("--save", action="store_true",
-                        help="Save report to research/notes/ in this repo")
+                        help="Save report to research/notes/ (both .md and .json)")
+    parser.add_argument("--json", action="store_true",
+                        help="Print machine-readable JSON to stdout instead of Rich output")
+    parser.add_argument("--compare", metavar="PREV_JSON",
+                        help="Compare current audit against a previous JSON audit file")
+    parser.add_argument("--history", action="store_true",
+                        help="Show score history from saved audit JSON files")
+    parser.add_argument("--next-fix", action="store_true",
+                        help="Print only the single highest-priority action and exit")
     args = parser.parse_args()
+
+    console = Console()
+
+    if args.history:
+        cmd_history(console)
+        return
 
     root = Path(args.project).expanduser().resolve()
     if not root.is_dir():
         print(f"Error: {root} is not a directory", file=sys.stderr)
         sys.exit(1)
 
-    console = Console()
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
-
     report = AuditReport(project_path=root, timestamp=timestamp)
     report.layers = [
         audit_claude_md(root),
@@ -562,16 +701,32 @@ def main() -> None:
         audit_environment(root),
     ]
 
+    data = report.to_dict()
+
+    if args.next_fix:
+        if data["priority_actions"]:
+            print(data["priority_actions"][0]["action"])
+        return
+
+    if args.json:
+        print(json.dumps(data, indent=2))
+        return
+
     md = render_report(report, console)
 
+    if args.compare:
+        cmd_compare(data, Path(args.compare).expanduser(), console)
+
     if args.save:
-        notes_dir = REPO_ROOT / "research" / "notes"
-        notes_dir.mkdir(parents=True, exist_ok=True)
+        notes_dir = _notes_dir()
         date = datetime.now().strftime("%Y%m%d-%H%M")
         slug = re.sub(r"[^a-z0-9]+", "-", root.name.lower())[:30]
-        filename = notes_dir / f"{date}-audit-{slug}.md"
-        filename.write_text(md, encoding="utf-8")
-        console.print(f"\n[green]✓ Saved → {filename.relative_to(REPO_ROOT)}[/green]")
+        md_path = notes_dir / f"{date}-audit-{slug}.md"
+        json_path = notes_dir / f"{date}-audit-{slug}.json"
+        md_path.write_text(md, encoding="utf-8")
+        json_path.write_text(json.dumps(data, indent=2), encoding="utf-8")
+        console.print(f"\n[green]✓ Saved → {md_path.relative_to(REPO_ROOT)}[/green]")
+        console.print(f"[green]✓ Saved → {json_path.relative_to(REPO_ROOT)}[/green]")
 
 
 if __name__ == "__main__":

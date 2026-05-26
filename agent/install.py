@@ -70,7 +70,8 @@ def detect_project(root: Path) -> ProjectInfo:
 
     # ── Python ────────────────────────────────────────────────────────────
     if any((root / f).exists() for f in
-           ["pyproject.toml", "setup.py", "setup.cfg", "requirements.txt", "Pipfile"]):
+           ["pyproject.toml", "setup.py", "setup.cfg", "requirements.txt", "Pipfile",
+            "poetry.lock", "uv.lock"]):
         info.language = "Python"
         info.runtime = _run(["python3", "--version"]) or "Python 3.x"
         info.extra_allows = [
@@ -81,16 +82,37 @@ def detect_project(root: Path) -> ProjectInfo:
         deps = _read_python_deps(root)
         info.deps = deps
 
-        if (root / "pyproject.toml").exists() and "uv" in (root / "pyproject.toml").read_text():
+        # Package manager: poetry > uv > pip
+        if (root / "poetry.lock").exists():
+            info.install_cmd = "poetry install"
+            info.extra_allows.append("Bash(poetry *)")
+        elif (root / "uv.lock").exists() or (
+            (root / "pyproject.toml").exists()
+            and "uv" in (root / "pyproject.toml").read_text()
+        ):
             info.install_cmd = "uv sync"
             info.extra_allows.append("Bash(uv *)")
         else:
             info.install_cmd = "pip install -r requirements.txt"
 
-        info.test_cmd = "pytest"
-        info.test_watch_cmd = "ptw"
-        info.lint_cmd = "ruff check . && mypy ."
-        info.lint_fix_cmd = "ruff check --fix ."
+        # Test framework
+        if "pytest" in deps or any((root / f).exists() for f in ["pytest.ini", "conftest.py"]):
+            info.test_cmd = "pytest"
+            info.test_watch_cmd = "ptw"
+        else:
+            info.test_cmd = "python -m unittest discover"
+            info.test_watch_cmd = ""
+
+        # Linter
+        if "ruff" in deps:
+            info.lint_cmd = "ruff check ."
+            info.lint_fix_cmd = "ruff check --fix ."
+        elif "flake8" in deps:
+            info.lint_cmd = "flake8 ."
+            info.lint_fix_cmd = "autopep8 --in-place -r ."
+        else:
+            info.lint_cmd = "ruff check . && mypy ."
+            info.lint_fix_cmd = "ruff check --fix ."
 
         if any(d in deps for d in ["fastapi", "uvicorn"]):
             info.framework = "FastAPI"
@@ -127,17 +149,33 @@ def detect_project(root: Path) -> ProjectInfo:
         info.deps = list(deps_all.keys())
         scripts = pkg.get("scripts", {})
 
-        pm = "pnpm" if (root / "pnpm-lock.yaml").exists() else \
+        pm = "bun" if (root / "bun.lockb").exists() else \
+             "pnpm" if (root / "pnpm-lock.yaml").exists() else \
              "yarn" if (root / "yarn.lock").exists() else "npm"
 
         info.install_cmd = f"{pm} install"
         info.dev_cmd = f"{pm} run dev" if "dev" in scripts else f"{pm} start"
         info.build_cmd = f"{pm} run build" if "build" in scripts else ""
-        info.test_cmd = f"{pm} test"
-        info.test_watch_cmd = f"{pm} run test:watch" if "test:watch" in scripts else ""
-        info.lint_cmd = f"{pm} run lint" if "lint" in scripts else ""
+        info.lint_cmd = f"{pm} run lint" if "lint" in scripts else f"{pm} run typecheck"
         info.lint_fix_cmd = f"{pm} run lint:fix" if "lint:fix" in scripts else ""
         info.extra_allows = [f"Bash({pm} *)", "Bash(npx *)", "Bash(node *)"]
+
+        # Test framework detection
+        if "vitest" in deps_all:
+            info.test_cmd = f"{pm} run test"
+            info.test_watch_cmd = f"{pm} run test -- --watch"
+        elif "jest" in deps_all:
+            info.test_cmd = f"{pm} test"
+            info.test_watch_cmd = f"{pm} test -- --watch"
+        elif "mocha" in deps_all:
+            info.test_cmd = f"{pm} test"
+            info.test_watch_cmd = ""
+        elif "playwright" in deps_all or "@playwright/test" in deps_all:
+            info.test_cmd = f"{pm} run test:e2e" if "test:e2e" in scripts else f"npx playwright test"
+            info.test_watch_cmd = ""
+        else:
+            info.test_cmd = f"{pm} test"
+            info.test_watch_cmd = f"{pm} run test:watch" if "test:watch" in scripts else ""
 
         if "next" in deps_all:
             info.framework = "Next.js"
@@ -302,6 +340,28 @@ Copy `.env.example` to `.env` and fill in:
 """
 
 
+def _edit_scopes(info: ProjectInfo) -> list[str]:
+    """Generate Edit() scope rules based on detected framework."""
+    if info.language in ("TypeScript", "JavaScript"):
+        scopes = ["Edit(src/**)", "Edit(app/**)", "Edit(components/**)", "Edit(pages/**)",
+                  "Edit(lib/**)", "Edit(utils/**)", "Edit(tests/**)", "Edit(test/**)",
+                  "Write(public/**)", "Write(dist/**)", "Write(build/**)", "Write(.next/**)",
+                  "Write(node_modules/**)", "Write(coverage/**)", "Write(.nyc_output/**)",
+                  "Write(storybook-static/**)"]
+    elif info.language == "Python":
+        scopes = ["Edit(src/**)", "Edit(app/**)", "Edit(tests/**)", "Edit(scripts/**)",
+                  "Write(.venv/**)", "Write(__pycache__/**)", "Write(.pytest_cache/**)",
+                  "Write(dist/**)", "Write(build/**)", "Write(*.egg-info/**)"]
+    elif info.language == "Go":
+        scopes = ["Edit(cmd/**)", "Edit(internal/**)", "Edit(pkg/**)",
+                  "Write(bin/**)", "Write(vendor/**)"]
+    elif info.language == "Rust":
+        scopes = ["Edit(src/**)", "Edit(tests/**)", "Write(target/**)"]
+    else:
+        scopes = ["Edit(src/**)", "Edit(tests/**)", "Write(dist/**)"]
+    return scopes
+
+
 def generate_settings_json(info: ProjectInfo) -> str:
     base_allows = [
         "Bash(git *)",
@@ -315,7 +375,7 @@ def generate_settings_json(info: ProjectInfo) -> str:
     ]
     settings = {
         "permissions": {
-            "allow": base_allows + info.extra_allows,
+            "allow": base_allows + info.extra_allows + _edit_scopes(info),
             "deny": [
                 "Bash(git push --force*)",
                 "Bash(git push -f *)",
@@ -418,14 +478,24 @@ def install(root: Path, dry_run: bool = False, force: bool = False) -> None:
 
         maybe(f".claude/hooks/{hook_name}", dst, _install_hook)
 
-    # .claude/commands/ (create directory so slash commands can be added)
+    # .claude/commands/ — copy slash commands from this repo
+    commands_src = REPO_ROOT / ".claude" / "commands"
     commands_dir = root / ".claude" / "commands"
-    if not commands_dir.exists():
-        actions.append((
-            ".claude/commands/ (directory)",
-            commands_dir,
-            lambda: commands_dir.mkdir(parents=True, exist_ok=True),
-        ))
+    if commands_src.exists():
+        for cmd_file in sorted(commands_src.glob("*.md")):
+            dst = commands_dir / cmd_file.name
+            if dst.exists() and not force:
+                print(f"  skip  .claude/commands/{cmd_file.name}  (already exists — use --force to overwrite)")
+                continue
+            _src = cmd_file
+            tag = " (overwrite)" if dst.exists() else ""
+            actions.append((
+                f".claude/commands/{cmd_file.name}{tag}",
+                dst,
+                lambda s=_src, d=dst: (d.parent.mkdir(parents=True, exist_ok=True), shutil.copy2(s, d)),
+            ))
+    else:
+        commands_dir.mkdir(parents=True, exist_ok=True)
 
     # ── Execute ────────────────────────────────────────────────────────────
     if not actions:

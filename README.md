@@ -16,15 +16,28 @@
 
 | What you get | Where it is |
 |---|---|
+| **One-command installer** — auto-detects language, writes CLAUDE.md + hooks + settings | `python agent/install.py /your/project` |
+| Audit tool — scores any project 0–25, `--json`, `--compare`, `--history` | `python agent/audit.py /your/project` |
 | Seven in-depth research guides | `research/00-overview.md` → `06-codebase-analysis.md` |
 | Fill-in-the-blank templates (CLAUDE.md, settings.json, four hooks) | `templates/` |
 | Real-world examples: web app, API service, data pipeline, Karpathy minimal | `examples/` |
-| Audit tool — scores any project 0–25 and outputs a prioritised fix list | `python agent/audit.py /your/project` |
 | Interactive research agent with two-pass stretch loop | `python agent/main.py` |
 | Parallel research runner — multiple topics simultaneously | `python agent/parallel.py` |
 | Four slash commands: `/ultraplan` `/goal` `/agents` `/ultrareview` | `.claude/commands/` |
 
-**Start here.** If you have five minutes, run `python agent/audit.py /path/to/your/project`. It will tell you exactly what your harness is missing and in what order to fix it. If you have fifteen, copy `examples/karpathy-minimal/CLAUDE.md` into your project root — that alone is the biggest single improvement most codebases can make.
+## Quick Start (5 minutes)
+
+```bash
+pip install -r requirements-agent.txt         # one-time
+
+python agent/install.py /path/to/your/project  # generates CLAUDE.md, hooks, settings.json
+# → edit CLAUDE.md: fill in project description + gotchas
+python agent/audit.py /path/to/your/project    # score your harness (target: 18+/25)
+```
+
+**Auto-detected languages:** Python (pip/poetry/uv) · TypeScript/JavaScript (npm/pnpm/yarn/bun) · Go · Rust · Ruby · Java/Kotlin
+
+A fresh install scores **21/25 immediately**. The remaining 4 points come from filling in your project description, real gotchas, and environment variables — content only you know.
 
 ---
 
@@ -242,9 +255,13 @@ Covers: never `dbt run --target prod` locally, `dbt deps` after pulling packages
 
 `agent/audit.py` scores any project's harness across five layers:
 
-```
+```bash
 python agent/audit.py /path/to/your/project
-python agent/audit.py . --save     ← saves report to research/notes/
+python agent/audit.py . --save          # saves .md + .json to research/notes/
+python agent/audit.py . --json          # machine-readable JSON output
+python agent/audit.py . --next-fix      # print single highest-priority action
+python agent/audit.py . --compare prev.json   # diff against a previous run
+python agent/audit.py --history         # show score trend across saved runs
 ```
 
 ```
