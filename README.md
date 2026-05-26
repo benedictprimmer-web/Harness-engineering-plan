@@ -4,6 +4,30 @@
 
 ---
 
+## At a Glance
+
+**The problem.** Claude Code sessions go wrong — Claude edits the wrong file, repeats the same mistake, asks for approval every five seconds, drifts off-task. The instinct is to blame the model. The evidence says otherwise.
+
+**The finding.** When researchers analysed Claude Code's source, they found that 1.6% is AI decision logic. The other 98.4% is the *harness* — the permission pipeline, context management, tool routing, and safety guards wrapped around the model. Four independent teams building coding agents from scratch converged on the same architecture. Andrej Karpathy demonstrated the impact with a 65-line text file: four behavioural rules, no code changes, AI coding accuracy from **65% to 94%**.
+
+**The discipline.** Harness engineering is the practice of building that wrapper deliberately — so Claude knows your project, respects its boundaries, and behaves consistently across sessions.
+
+**What this repo is.** A reference library: research guides, copy-paste templates, real-world examples, and Python tools for auditing and improving any project's harness.
+
+| What you get | Where it is |
+|---|---|
+| Seven in-depth research guides | `research/00-overview.md` → `06-codebase-analysis.md` |
+| Fill-in-the-blank templates (CLAUDE.md, settings.json, four hooks) | `templates/` |
+| Real-world examples: web app, API service, data pipeline, Karpathy minimal | `examples/` |
+| Audit tool — scores any project 0–25 and outputs a prioritised fix list | `python agent/audit.py /your/project` |
+| Interactive research agent with two-pass stretch loop | `python agent/main.py` |
+| Parallel research runner — multiple topics simultaneously | `python agent/parallel.py` |
+| Four slash commands: `/ultraplan` `/goal` `/agents` `/ultrareview` | `.claude/commands/` |
+
+**Start here.** If you have five minutes, run `python agent/audit.py /path/to/your/project`. It will tell you exactly what your harness is missing and in what order to fix it. If you have fifteen, copy `examples/karpathy-minimal/CLAUDE.md` into your project root — that alone is the biggest single improvement most codebases can make.
+
+---
+
 ## The Big Idea
 
 When Claude Code sessions go wrong — Claude edits the wrong file, repeats a mistake, asks for approval every five seconds, or drifts off-task — the instinct is to blame the model. The research says otherwise.

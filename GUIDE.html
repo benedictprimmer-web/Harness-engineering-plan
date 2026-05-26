@@ -236,6 +236,120 @@ a { color: #6366f1; text-decoration: none; }
     break-inside: avoid;
 }
 
+.overview {
+    page-break-after: always;
+    padding: 20px 0 0;
+}
+
+.overview-header {
+    margin-bottom: 24px;
+}
+
+.overview-header h2 {
+    font-size: 20pt;
+    border: none;
+    margin: 0 0 6px 0;
+    color: #0f172a;
+}
+
+.overview-header p {
+    font-size: 10.5pt;
+    color: #64748b;
+    margin: 0;
+}
+
+.stats-row {
+    display: flex;
+    gap: 16px;
+    margin: 20px 0;
+}
+
+.stat-box {
+    flex: 1;
+    background: #0f172a;
+    border-radius: 10px;
+    padding: 20px 16px;
+    text-align: center;
+    color: white;
+}
+
+.stat-number {
+    font-size: 28pt;
+    font-weight: 700;
+    color: #a5b4fc;
+    line-height: 1.1;
+    display: block;
+}
+
+.stat-label {
+    font-size: 8.5pt;
+    color: #94a3b8;
+    margin-top: 6px;
+    line-height: 1.4;
+    display: block;
+}
+
+.overview-para {
+    font-size: 10.5pt;
+    color: #334155;
+    line-height: 1.7;
+    margin: 16px 0;
+}
+
+.overview-para strong {
+    color: #0f172a;
+}
+
+.overview table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 9.5pt;
+}
+
+.overview th {
+    background: #1e293b;
+    color: #f1f5f9;
+    padding: 7px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 9pt;
+}
+
+.overview td {
+    padding: 6px 12px;
+    border-bottom: 1px solid #e2e8f0;
+    vertical-align: top;
+}
+
+.overview tr:nth-child(even) td { background: #f8fafc; }
+.overview tr:last-child td { border-bottom: none; }
+
+.start-here {
+    background: #f0fdf4;
+    border: 1.5px solid #86efac;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-top: 20px;
+}
+
+.start-here p {
+    margin: 0;
+    font-size: 10pt;
+    color: #166534;
+    line-height: 1.6;
+}
+
+.start-here strong {
+    color: #14532d;
+}
+
+.start-here code {
+    background: #dcfce7;
+    border-color: #86efac;
+    color: #166534;
+}
+
 </style>
 </head>
 <body>
@@ -249,6 +363,65 @@ a { color: #6366f1; text-decoration: none; }
   </p>
   <div class="score-badge">22/25</div><br/>
   <div class="score-label">This repo's own harness audit score</div>
+</div>
+
+
+<div class="overview">
+  <div class="overview-header">
+    <h2>At a Glance</h2>
+    <p>Everything you need to know about this repo in one page.</p>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-box">
+      <span class="stat-number">98.4%</span>
+      <span class="stat-label">of Claude Code is harness infrastructure — not AI logic</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-number">65→94%</span>
+      <span class="stat-label">accuracy gain from a 65-line CLAUDE.md (Karpathy result)</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-number">22/25</span>
+      <span class="stat-label">this repo's own harness audit score</span>
+    </div>
+  </div>
+
+  <p class="overview-para">
+    <strong>The problem.</strong> Claude Code sessions go wrong — Claude edits the wrong file, repeats the same mistake,
+    asks for approval every five seconds, drifts off-task. The instinct is to blame the model.
+    When researchers analysed Claude Code's source code, they found that <strong>1.6% is AI decision logic</strong>.
+    The other 98.4% is the harness — the permission pipeline, context management, tool routing, and safety guards
+    wrapped around the model. Four independent teams building coding agents from scratch converged on the same architecture.
+  </p>
+
+  <p class="overview-para">
+    <strong>The discipline.</strong> Harness engineering is the practice of building that wrapper deliberately —
+    so Claude knows your project, respects its boundaries, and behaves consistently across sessions.
+    This repo is a reference library: research guides, copy-paste templates, real-world examples,
+    and Python tools for auditing and improving any project's harness.
+  </p>
+
+  <table>
+    <tr><th>What you get</th><th>Where it is</th></tr>
+    <tr><td>Seven in-depth research guides</td><td><code>research/00-overview.md</code> → <code>06-codebase-analysis.md</code></td></tr>
+    <tr><td>Fill-in-the-blank templates (CLAUDE.md, settings.json, four hooks)</td><td><code>templates/</code></td></tr>
+    <tr><td>Real-world examples: web app, API service, data pipeline, Karpathy minimal</td><td><code>examples/</code></td></tr>
+    <tr><td>Audit tool — scores any project 0–25, outputs a prioritised fix list</td><td><code>python agent/audit.py /your/project</code></td></tr>
+    <tr><td>Interactive research agent with two-pass stretch loop</td><td><code>python agent/main.py</code></td></tr>
+    <tr><td>Parallel research runner — multiple topics simultaneously</td><td><code>python agent/parallel.py</code></td></tr>
+    <tr><td>Four slash commands: /ultraplan /goal /agents /ultrareview</td><td><code>.claude/commands/</code></td></tr>
+  </table>
+
+  <div class="start-here">
+    <p>
+      <strong>Start here.</strong> If you have five minutes, run
+      <code>python agent/audit.py /path/to/your/project</code> — it will tell you exactly what your
+      harness is missing and in what order to fix it. If you have fifteen, copy
+      <code>examples/karpathy-minimal/CLAUDE.md</code> into your project root — that alone is the
+      biggest single improvement most codebases can make.
+    </p>
+  </div>
 </div>
 
 
@@ -276,6 +449,51 @@ a { color: #6366f1; text-decoration: none; }
 <blockquote>
 <p><strong>One idea:</strong> The infrastructure around an AI model — not the model itself — determines whether your sessions are productive or frustrating. This repo is a systematic guide to building that infrastructure.</p>
 </blockquote>
+<hr />
+<h2>At a Glance</h2>
+<p><strong>The problem.</strong> Claude Code sessions go wrong — Claude edits the wrong file, repeats the same mistake, asks for approval every five seconds, drifts off-task. The instinct is to blame the model. The evidence says otherwise.</p>
+<p><strong>The finding.</strong> When researchers analysed Claude Code's source, they found that 1.6% is AI decision logic. The other 98.4% is the <em>harness</em> — the permission pipeline, context management, tool routing, and safety guards wrapped around the model. Four independent teams building coding agents from scratch converged on the same architecture. Andrej Karpathy demonstrated the impact with a 65-line text file: four behavioural rules, no code changes, AI coding accuracy from <strong>65% to 94%</strong>.</p>
+<p><strong>The discipline.</strong> Harness engineering is the practice of building that wrapper deliberately — so Claude knows your project, respects its boundaries, and behaves consistently across sessions.</p>
+<p><strong>What this repo is.</strong> A reference library: research guides, copy-paste templates, real-world examples, and Python tools for auditing and improving any project's harness.</p>
+<table>
+<thead>
+<tr>
+<th>What you get</th>
+<th>Where it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Seven in-depth research guides</td>
+<td><code>research/00-overview.md</code> → <code>06-codebase-analysis.md</code></td>
+</tr>
+<tr>
+<td>Fill-in-the-blank templates (CLAUDE.md, settings.json, four hooks)</td>
+<td><code>templates/</code></td>
+</tr>
+<tr>
+<td>Real-world examples: web app, API service, data pipeline, Karpathy minimal</td>
+<td><code>examples/</code></td>
+</tr>
+<tr>
+<td>Audit tool — scores any project 0–25 and outputs a prioritised fix list</td>
+<td><code>python agent/audit.py /your/project</code></td>
+</tr>
+<tr>
+<td>Interactive research agent with two-pass stretch loop</td>
+<td><code>python agent/main.py</code></td>
+</tr>
+<tr>
+<td>Parallel research runner — multiple topics simultaneously</td>
+<td><code>python agent/parallel.py</code></td>
+</tr>
+<tr>
+<td>Four slash commands: <code>/ultraplan</code> <code>/goal</code> <code>/agents</code> <code>/ultrareview</code></td>
+<td><code>.claude/commands/</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Start here.</strong> If you have five minutes, run <code>python agent/audit.py /path/to/your/project</code>. It will tell you exactly what your harness is missing and in what order to fix it. If you have fifteen, copy <code>examples/karpathy-minimal/CLAUDE.md</code> into your project root — that alone is the biggest single improvement most codebases can make.</p>
 <hr />
 <h2>The Big Idea</h2>
 <p>When Claude Code sessions go wrong — Claude edits the wrong file, repeats a mistake, asks for approval every five seconds, or drifts off-task — the instinct is to blame the model. The research says otherwise.</p>
