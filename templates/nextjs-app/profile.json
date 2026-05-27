@@ -1,0 +1,24 @@
+{
+  "name": "nextjs-app",
+  "project_type": "nextjs-app",
+  "description": "Next.js application harness profile.",
+  "config": {
+    "schema_version": 1,
+    "project_type": "nextjs-app",
+    "main_branch": "main",
+    "test_commands": [
+      "node tests/harness-todo.test.js",
+      "npm run build"
+    ],
+    "high_impact_paths": [
+      "app/",
+      "pages/",
+      "src/",
+      "components/"
+    ],
+    "generated_artifact_patterns": [
+      ".next/"
+    ]
+  }
+}
+

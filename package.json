@@ -1,0 +1,12 @@
+{
+  "name": "harness-engineering-lab",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Reusable no-dependency harness operating system for AI-agent projects.",
+  "type": "commonjs",
+  "scripts": {
+    "test": "node tests/harness-contract.test.js && node tests/installer.test.js && node tests/audit.test.js"
+  },
+  "license": "UNLICENSED"
+}
+

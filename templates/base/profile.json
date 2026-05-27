@@ -1,0 +1,16 @@
+{
+  "name": "base",
+  "project_type": "generic",
+  "description": "Portable harness contract for a target project.",
+  "config": {
+    "schema_version": 1,
+    "project_type": "generic",
+    "main_branch": "main",
+    "test_commands": [
+      "node tests/harness-todo.test.js"
+    ],
+    "high_impact_paths": [],
+    "generated_artifact_patterns": []
+  }
+}
+

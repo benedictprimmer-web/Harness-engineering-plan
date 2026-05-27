@@ -1,0 +1,22 @@
+{
+  "name": "content-operation",
+  "project_type": "content-operation",
+  "description": "Content operation harness profile.",
+  "config": {
+    "schema_version": 1,
+    "project_type": "content-operation",
+    "main_branch": "main",
+    "test_commands": [
+      "node tests/harness-todo.test.js"
+    ],
+    "high_impact_paths": [
+      "content/",
+      "docs/",
+      "assets/"
+    ],
+    "generated_artifact_patterns": [
+      "*.pdf"
+    ]
+  }
+}
+

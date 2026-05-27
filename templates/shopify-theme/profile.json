@@ -1,0 +1,24 @@
+{
+  "name": "shopify-theme",
+  "project_type": "shopify-theme",
+  "description": "Shopify theme profile based on the Offside Goods harness shape.",
+  "config": {
+    "schema_version": 1,
+    "project_type": "shopify-theme",
+    "main_branch": "main",
+    "test_commands": [
+      "node tests/harness-todo.test.js"
+    ],
+    "high_impact_paths": [
+      "layout/",
+      "templates/",
+      "sections/",
+      "snippets/",
+      "assets/"
+    ],
+    "generated_artifact_patterns": [
+      "*.zip"
+    ]
+  }
+}
+

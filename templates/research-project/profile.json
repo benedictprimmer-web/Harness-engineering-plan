@@ -1,0 +1,23 @@
+{
+  "name": "research-project",
+  "project_type": "research-project",
+  "description": "Research project harness profile.",
+  "config": {
+    "schema_version": 1,
+    "project_type": "research-project",
+    "main_branch": "main",
+    "test_commands": [
+      "node tests/harness-todo.test.js"
+    ],
+    "high_impact_paths": [
+      "data/",
+      "analysis/",
+      "reports/"
+    ],
+    "generated_artifact_patterns": [
+      "*.pdf",
+      "*.csv"
+    ]
+  }
+}
+
