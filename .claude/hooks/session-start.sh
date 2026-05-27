@@ -51,5 +51,15 @@ if [ -d "$NOTES_DIR" ]; then
   echo "Research notes: $NOTE_COUNT file(s) in research/notes/"
 fi
 
+# ── Pending learnings banner ───────────────────────────────────────────────────
+LEARNINGS="$REPO_ROOT/.claude/session-learnings.md"
+if [ -f "$LEARNINGS" ]; then
+  SUGGESTION_COUNT=$(grep -c "^##\|^-" "$LEARNINGS" 2>/dev/null || echo "?")
+  echo ""
+  echo "⚡ Pending learnings: .claude/session-learnings.md exists from a previous session."
+  echo "   Review and apply suggestions, then delete the file."
+  echo "   View: cat .claude/session-learnings.md"
+fi
+
 echo ""
-echo "Session ready. Use /ultraplan, /goal, /agents, /ultrareview."
+echo "Session ready. Use /ultraplan, /goal, /agents, /ultrareview, /task."

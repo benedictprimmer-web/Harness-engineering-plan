@@ -32,7 +32,8 @@
       { "matcher": "Edit|Write|Create", "command": ".claude/hooks/post-edit-format.sh" }
     ],
     "Stop": [
-      { "command": ".claude/hooks/stop-hook-git-check.sh" }
+      { "command": ".claude/hooks/stop-hook-git-check.sh" },
+      { "command": ".claude/hooks/stop-hook-reflect.sh" }
     ]
   }
 }
