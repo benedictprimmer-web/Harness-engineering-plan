@@ -18,6 +18,8 @@
 |---|---|
 | **One-command installer** — auto-detects language, writes CLAUDE.md + hooks + settings | `python agent/install.py /your/project` |
 | Audit tool — scores any project 0–25, `--json`, `--compare`, `--history` | `python agent/audit.py /your/project` |
+| Teacher mode — plans a task-specific harness first, applies only after approval | `python agent/teacher.py /your/project --task "..."` |
+| Harness researcher — evaluates proposed harness changes with source-backed evidence | `python agent/harness_researcher.py "Add task-specific project subagents"` |
 | Seven in-depth research guides | `research/00-overview.md` → `06-codebase-analysis.md` |
 | Fill-in-the-blank templates (CLAUDE.md, settings.json, four hooks) | `templates/` |
 | Real-world examples: web app, API service, data pipeline, Karpathy minimal | `examples/` |
@@ -38,6 +40,36 @@ python agent/audit.py /path/to/your/project    # score your harness (target: 18+
 **Auto-detected languages:** Python (pip/poetry/uv) · TypeScript/JavaScript (npm/pnpm/yarn/bun) · Go · Rust · Ruby · Java/Kotlin
 
 A fresh install scores **21/25 immediately**. The remaining 4 points come from filling in your project description, real gotchas, and environment variables — content only you know.
+
+## Teacher Mode
+
+Teacher mode is a plan-first path for a specific target repo and task. It inspects
+the project, reuses the existing project detector and audit tool, then prints a
+Markdown and JSON plan. By default it does **not** write to the target project.
+
+```bash
+python agent/teacher.py /path/to/project --task "make this repo easy for agents to build features"
+```
+
+After reviewing the plan, apply only the Claude harness files:
+
+```bash
+python agent/teacher.py /path/to/project --task "make this repo easy for agents to build features" --apply
+```
+
+`--apply` is intentionally narrow: it can write `CLAUDE.md`,
+`.claude/settings.json`, `.claude/commands/`, `.claude/agents/`,
+`.claude/hooks/`, and `.env.example`. Existing files are skipped unless
+`--force` is passed. It does not move or reorganize application source files.
+
+To research a proposed harness feature before adding it:
+
+```bash
+python agent/harness_researcher.py "Add task-specific project subagents"
+```
+
+The researcher tries live source checks when network access is available and falls
+back to committed source summaries in `research/sources/`.
 
 ---
 
