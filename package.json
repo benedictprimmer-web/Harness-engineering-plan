@@ -5,8 +5,7 @@
   "description": "Reusable no-dependency harness operating system for AI-agent projects.",
   "type": "commonjs",
   "scripts": {
-    "test": "node tests/harness-contract.test.js && node tests/installer.test.js && node tests/audit.test.js"
+    "test": "python3 -m unittest discover -s tests -p 'test_*.py' && node tests/harness-contract.test.js && node tests/installer.test.js && node tests/audit.test.js"
   },
   "license": "UNLICENSED"
 }
-

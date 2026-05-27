@@ -1,0 +1,8 @@
+{
+  "title": "Claude Code slash commands",
+  "url": "https://docs.anthropic.com/en/docs/claude-code/slash-commands",
+  "source_type": "official_docs",
+  "summary": "Project slash commands are Markdown files stored under .claude/commands/. They can capture reusable prompts and accept arguments through placeholders such as $ARGUMENTS.",
+  "harness_relevance": "Teacher mode can add task-specific project commands without changing application source files."
+}
+

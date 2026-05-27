@@ -24,6 +24,24 @@ Audit a target project:
 node scripts/harness-audit.js --target /path/to/project
 ```
 
+Create a plan-first Claude teacher harness for a project:
+
+```bash
+python3 agent/teacher.py /path/to/project --task "make this repo easy for agents to build features"
+```
+
+Install the approved Claude harness files only:
+
+```bash
+python3 agent/teacher.py /path/to/project --task "make this repo easy for agents to build features" --apply
+```
+
+Research a proposed harness design change:
+
+```bash
+python3 agent/harness_researcher.py "Add task-specific project subagents"
+```
+
 Queue exactly one harness improvement:
 
 ```bash
@@ -62,11 +80,10 @@ tests/
 
 The loop is conservative by default. It observes, audits, classifies, proposes, creates one task, writes notes, and stops.
 
+Teacher mode is also conservative. A default run prints a Markdown and JSON plan without mutating the target project. `--apply` writes only `CLAUDE.md`, `.claude/settings.json`, `.claude/commands/`, `.claude/agents/`, `.claude/hooks/`, and optional `.env.example`; existing files are skipped unless `--force` is passed.
+
 ## Tests
 
 ```bash
-node tests/harness-contract.test.js
-node tests/installer.test.js
-node tests/audit.test.js
+npm test
 ```
-
