@@ -1,0 +1,8 @@
+{
+  "title": "Claude Code settings",
+  "url": "https://docs.anthropic.com/en/docs/claude-code/settings",
+  "source_type": "official_docs",
+  "summary": "Claude Code supports project-level .claude/settings.json files for permissions, hooks, environment variables, and other shared project behavior.",
+  "harness_relevance": "Teacher mode should install settings only inside .claude/settings.json and use deny rules to protect secrets and destructive commands."
+}
+

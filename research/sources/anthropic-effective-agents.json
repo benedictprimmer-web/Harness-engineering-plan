@@ -1,0 +1,8 @@
+{
+  "title": "Building effective agents",
+  "url": "https://www.anthropic.com/engineering/building-effective-agents",
+  "source_type": "engineering_post",
+  "summary": "Anthropic recommends starting with simple, composable agentic patterns and adding complexity only when requirements justify it.",
+  "harness_relevance": "Harness features should prefer small prompts, commands, and scoped agents over broad framework rewrites."
+}
+

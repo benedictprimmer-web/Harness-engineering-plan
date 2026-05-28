@@ -1,0 +1,8 @@
+{
+  "title": "Effective context engineering for AI agents",
+  "url": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents",
+  "source_type": "engineering_post",
+  "summary": "Effective agent work depends on durable upfront context plus just-in-time retrieval from the environment.",
+  "harness_relevance": "Teacher mode should write context-loading rules and avoid dumping entire projects into memory."
+}
+

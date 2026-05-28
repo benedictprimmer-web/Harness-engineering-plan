@@ -1,0 +1,8 @@
+{
+  "title": "Claude Code subagents",
+  "url": "https://docs.anthropic.com/en/docs/claude-code/sub-agents",
+  "source_type": "official_docs",
+  "summary": "Claude Code project subagents live under .claude/agents/ as Markdown files with YAML frontmatter for name, description, optional tools, and specialized instructions.",
+  "harness_relevance": "Teacher mode should create small project-specific subagents with constrained tool lists."
+}
+
