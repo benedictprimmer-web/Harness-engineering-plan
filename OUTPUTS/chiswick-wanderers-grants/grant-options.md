@@ -8,6 +8,41 @@ Researched 18 September 2026.
 
 ---
 
+## Update, 18 September — confirmed club facts
+
+Three answers from the club change the picture:
+
+- **No junior members or junior activity.** Cash4Clubs stays in, and it is now the clear first application.
+- **The club has just started.** No filing history and probably no annual accounts yet. This closes the funders that require two years of accounts and makes the small, fast routes the right order of attack. It also opens one fund that only exists for new teams: Grow the Game.
+- **Pitches are rented.** No freehold, lease or licence, which removes facilities and capital funding almost entirely: Football Foundation capital grants, the Grass Pitch Maintenance Fund and Screwfix all need tenure or a building you control. Treat the £2,000 as kit, equipment and coaching only.
+
+**Revised order:** Grow the Game and Cash4Clubs first, then Hounslow and Awards for All, then Movement for Good as a free side bet. Facilities funding is a conversation for a later season, once you have a pitch agreement and a year of accounts.
+
+### Grow the Game — £1,500 per new team (added)
+
+The Football Foundation's Grow the Game scheme funds the creation of new teams and coaching qualifications with grants of £1,500 per team, up to four teams, spread across three years. It is revenue funding, so renting pitches is not a barrier. Historically it has covered male teams from U14s to adult, female teams from U7s upward, and disability teams, and applicants must be not-for-profit organisations planning to set up one or more new teams.
+
+It is the best structural fit on this list for a club in its first season, and it funds exactly what you asked about: new team costs and coaching badges.
+
+The catch: the Football Foundation website was unreachable from this session, so the 2026-27 window, the current eligibility for open-age men's teams and the application dates all need confirming. Ask Middlesex FA — they handle these applications with clubs and will know whether the window is open.
+
+https://footballfoundation.org.uk/grant/grow-the-game
+
+### Aldi Sports Fund — missed this year
+
+Up to £3,000 for grassroots clubs in England and Wales, covering equipment, kit, coaching and facility hire. Applications ran 3–31 August 2026, so you are a fortnight too late. Tiered awards from £750 to £3,000, applied for by a 200-word email to sportsfund@aldi.co.uk. Diarise late July 2027.
+
+https://www.aldi.co.uk/sportsfund
+
+### What being new does not block
+
+- **Cash4Clubs** asks for a governing document or charity number and a bank statement in the club's name from the last three months. No accounts required.
+- **Awards for All** does not require annual accounts if the organisation is less than 15 months old, and accepts a bank welcome letter instead of a statement if the account was opened within the last three months.
+
+Both are designed to be reachable by a club in year one. Use them before the funders that weigh delivery history.
+
+---
+
 ## The short version
 
 Your strongest single option is **Cash4Clubs**. It is £2,000, it is unrestricted, and it is one of very few funds that *requires* you to be adults-only rather than penalising you for it. It opens on 1 October 2026, two weeks from now.

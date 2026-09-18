@@ -1,102 +1,110 @@
-# Chiswick Wanderers — what you need in place before applying
+# Chiswick Wanderers — what you need to do
 
-Companion to `grant-options.md`. Everything here is either a hard eligibility gate or a document a funder will ask to see.
+Revised 18 September 2026, after confirming: no junior members, club just started, pitches rented.
 
----
-
-## 1. Four things to confirm first
-
-These decide whether the shortlist is even right. Answer them before writing anything.
-
-**Does the club have any junior members or run any junior activity?**
-If yes, Cash4Clubs is out entirely — it funds adults-only organisations, and "we have one U18s side" ends the application. It also changes the whole shortlist, because youth activity opens up funds that are currently closed to you. Check the membership list, not your memory of it.
-
-**What is the exact registered name and charity number?**
-Every funder cross-checks against the Charity Commission register. Confirm the name on the register matches the name you apply under, and that the register entry is up to date (trustees, accounts filed, address).
-
-**Are the annual accounts filed and up to date?**
-Several funders want the last two full years. A charity with overdue filings on the public register gets declined on sight.
-
-**What is your position on the pitches and any building?**
-Freehold, a lease, a licence, or session-by-session hire? This single answer decides whether any capital or facilities funding is open to you. Session hire rules out most of it.
+Companion to `grant-options.md`.
 
 ---
 
-## 2. Documents to assemble
+## What the three answers changed
 
-One folder, done once, reused for every application.
+**No juniors** — Cash4Clubs is live, and it is the strongest £2,000 on the list.
 
-- [ ] Governing document — constitution, CIO constitution or trust deed
-- [ ] Charity / CIO registration number and a screenshot of the register entry
-- [ ] Last two years of annual accounts, signed
-- [ ] Most recent bank statement
-- [ ] Safeguarding policy covering adults at risk (adult clubs still need one; several funders ask)
-- [ ] Equality / inclusion statement — short, but funders look for it
-- [ ] Public liability insurance certificate
-- [ ] FA affiliation confirmation for the current season, via Middlesex FA
-- [ ] List of trustees or committee members with roles
-- [ ] Two or three written quotes for anything you intend to buy
-- [ ] Landlord or landowner written consent, if anything is fixed to a site
+**Just started** — you almost certainly have no annual accounts. That is fine for the funds now at the top of the list and fatal for the ones at the bottom. It also makes you eligible for Grow the Game, which exists specifically to fund new teams.
 
-## 3. Governance requirements
+**Renting pitches** — facilities and capital funding is out for now. Football Foundation capital grants, the Grass Pitch Maintenance Fund and the Screwfix Foundation all require freehold, a long lease or licence, or a building you control. Don't spend time on them this season. Spend the £2,000 target on kit, equipment and coaching.
 
-- [ ] At least two unconnected people on the committee or board — required by Awards for All, and standard elsewhere. "Unconnected" means not related and not living together.
-- [ ] Bank account in the club's name requiring two signatories for every payment
-- [ ] A named contact who can sign a grant agreement on the club's behalf
-- [ ] Minutes of the meeting where the committee agreed to apply — small funders rarely ask, larger ones do
-
-## 4. The participation data
-
-This is the part that decides outcomes, and the part most clubs skip. Collect it before you write a word.
-
-- [ ] Total members, and how many are playing members
-- [ ] Weekly participants — how many people actually turn up in a typical week
-- [ ] Postcodes members come from, at district level (W4, TW8, UB2 and so on)
-- [ ] How many were inactive before joining, and how you know
-- [ ] Age breakdown, and how many are over 35 or over 50
-- [ ] How many are from under-represented groups relevant to your case
-- [ ] Any barriers you remove — subsidised subs, no kit cost, no pay-to-play
-- [ ] What you currently charge per player per season, and what it costs you to run
-
-Two or three quotes from members about what the club does for them are worth having too. Funders use them verbatim.
-
-## 5. What each fund needs beyond the core pack
-
-**Cash4Clubs** — a written social purpose case. Not "we play football" but who plays, what it changes, and why they wouldn't otherwise. Adults-only confirmation. One application per club, so decide the single ask before you start.
-
-**Hounslow Thriving Communities** — the project framed around health, wellbeing and social isolation, with a link to the borough's Equality Opportunity Areas if you can honestly make one. A project budget. Ealing and Hounslow CVS will review a draft free: 020 3096 4250, iain@ehcvs.org.uk.
-
-**Awards for All England** — community benefit beyond your own playing members, a 12-month project plan, and the two-unconnected-people and two-signatory requirements above. Apply at least 12 weeks before you spend anything.
-
-**FA / Middlesex FA coaching bursaries** — the named coach, which qualification, and the course cost. The UEFA B bursary is targeted at female coaches and male coaches from Black, Asian and minority ethnic backgrounds, so identify who in your coaching group is eligible before applying.
-
-**Football Foundation** — security of tenure (freehold, 10-year uninterruptible lease or licence, or written landowner consent), a PitchPower pitch assessment report for pitch work, and 25% partnership funding you can evidence. Speak to Middlesex FA before applying.
-
-**Sport England Movement Fund** — a genuine participation project targeting inactive or under-represented adults. If the real ask is equipment for an existing league side, it is ineligible.
-
-**Screwfix Foundation** — a building you hold or control, and an answer to the "people in need" test. No previous Screwfix grant within two years.
+Ignore anything in the earlier version of this file about landlord consent, PitchPower reports or two years of accounts. None of it applies to you yet.
 
 ---
 
-## 6. Sequence
+## The document pack you actually need
+
+Short, because the funds that suit a new club ask for little.
+
+- [ ] **Governing document** — constitution, CIO constitution or articles. Cash4Clubs and Awards for All both require this. If it isn't written and adopted yet, this is the blocking task.
+- [ ] **Charity or CIO registration number**, if registration is complete. Cash4Clubs accepts a charity number in place of the governing document.
+- [ ] **Bank account in the club's name**, requiring two signatories. Cash4Clubs needs a statement from the last three months showing sort code and account number, and cannot pay into a personal account. Awards for All will accept a bank welcome letter instead if the account is less than three months old.
+- [ ] **Committee list** — at minimum chair, secretary, treasurer, with at least two people who are unconnected (not related, not living together).
+- [ ] **Safeguarding policy for adults at risk** — required by Cash4Clubs only if you work with vulnerable adults, but write one anyway; it takes an hour and several funders ask.
+- [ ] **Public liability insurance certificate**
+- [ ] **Middlesex FA affiliation** for the current season
+- [ ] **Quotes** for the kit or equipment you intend to buy, two or three
+- [ ] **Your pitch hire agreement or invoices** — proof of cost, useful for Grow the Game and Awards for All
+
+Not needed yet: annual accounts, reserves policy, landowner consent, pitch assessment reports.
+
+---
+
+## The participation data
+
+This is the work that decides whether the applications land. A new club has no delivery record, so the numbers and the story have to carry the bid.
+
+- [ ] Members now, and the target by end of season
+- [ ] Weekly attendance at training and matches
+- [ ] Postcode districts members come from — W4, plus wherever else
+- [ ] How many were doing no regular physical activity before they joined, and how you know
+- [ ] Age spread, and the number over 35
+- [ ] Who you are reaching that other local clubs are not
+- [ ] What you charge per player, what it costs you to run, and the gap
+- [ ] Two or three quotes from members in their own words
+
+A WhatsApp poll to the squad gets most of this in a day. Funders reproduce the member quotes verbatim, so ask for them properly rather than paraphrasing.
+
+---
+
+## Per-fund requirements, in application order
+
+### Grow the Game — £1,500 per new team
+- Not-for-profit organisation setting up one or more new teams
+- New team, or teams, starting within the next two years
+- Revenue costs: pitch hire, affiliation, referees, kit, coaching badges
+- **Verify first:** whether the 2026-27 window is open and whether open-age men's teams are eligible this cycle. Call Middlesex FA rather than guessing.
+
+### Cash4Clubs — £2,000, opens 1 October
+- Governing document or charity/company number
+- Bank statement in the club's name, dated within three months
+- Safeguarding policy if working with vulnerable adults
+- Adults-only confirmation — you clear this
+- A written social purpose case: disadvantage, under-represented adults, or issues like crime and anti-social behaviour
+- One application per club, so decide the single ask first
+
+### Hounslow Thriving Communities small grant — up to £1,500
+- Project framed around health, wellbeing and social isolation, not kit
+- Project budget
+- Ask Ealing and Hounslow CVS to review a draft: 020 3096 4250, iain@ehcvs.org.uk
+
+### Awards for All England — £300 to £20,000
+- Two unconnected people on the committee
+- Bank account requiring two signatories
+- No annual accounts needed while the organisation is under 15 months old
+- Community benefit beyond your own playing members
+- Apply at least 12 weeks before you spend anything
+
+### Movement for Good — £1,000
+- Registered charity, and someone to nominate. That is the whole requirement.
+
+---
+
+## Sequence
 
 **This week**
-- [ ] Confirm the junior membership question
-- [ ] Check the Charity Commission entry and accounts filing status
-- [ ] Nominate the club for Movement for Good, and ask the squad to nominate too
-- [ ] Call Middlesex FA about coaching subsidies and current Football Foundation windows
-- [ ] Start the participation data collection — a WhatsApp poll gets most of it
+- [ ] Call Middlesex FA: Grow the Game window, open-age eligibility, and any coaching course subsidies
+- [ ] Confirm the governing document is written and adopted, and the bank account is open with two signatories
+- [ ] Nominate the club for Movement for Good and ask the squad to do the same
+- [ ] Run the WhatsApp poll for the participation data
 
-**Next two weeks, before 1 October**
-- [ ] Assemble the document folder in section 2
-- [ ] Get quotes for whatever you intend to buy
+**Before 1 October**
+- [ ] Get two or three quotes for kit and equipment
 - [ ] Draft the Cash4Clubs social purpose case
-- [ ] Decide the single £2,000 ask: kit, coaching, or equipment, not all three thinly
+- [ ] Decide the single £2,000 ask
+- [ ] Start the Grow the Game application if the window is open
 
 **October**
-- [ ] Submit Cash4Clubs on 1 October
-- [ ] Submit the Hounslow small grant, after a CVS read-through
+- [ ] Submit Cash4Clubs on day one
+- [ ] Submit the Hounslow small grant after a CVS read-through
 
-**November onwards**
-- [ ] Screwfix by 10 November, if you hold a building
-- [ ] Build an Awards for All bid if the real need exceeds £2,000
+**Later**
+- [ ] Awards for All, if the real need is larger than £2,000
+- [ ] Aldi Sports Fund, applications open late July 2027
+- [ ] Facilities funding once you have a pitch agreement with tenure and a year of accounts
